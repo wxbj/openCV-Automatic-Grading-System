@@ -58,7 +58,7 @@ if __name__ == "__main__":
     img = image.copy()
     cv.drawContours(img, contourChoicePoints, -1, (0, 255, 0), 5)
     cv.imshow("image", img)
-    # contourChoicePointsReorder = utils.reorderContourChoice(contourChoicePoints)
+    contourChoicePointsReorder = utils.reorderContourChoice(contourChoicePoints)
 
     # contoursNeedHandle["firstColumnChoiceContour"] = contourChoicePointsReorder[0]
     # contoursNeedHandle["secondColumnChoiceContour"] = contourChoicePointsReorder[1]
