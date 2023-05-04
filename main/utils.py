@@ -30,7 +30,7 @@ def getContourChoice(contours):
         area = cv.contourArea(contour)
         if area > 10000:
             perimeter = cv.arcLength(contour, True)
-            approx = cv.approxPolyDP(contour, 0.06 * perimeter, True)
+            approx = cv.approxPolyDP(contour, 0.02 * perimeter, True)
             if len(approx) == 4:
                 contoursRect.append(contour)
     contoursRect = sorted(contoursRect, key=cv.contourArea, reverse=True)
@@ -106,14 +106,54 @@ def splitMissExamBoxes(img):
 def splitTheFirstThreeColumnChoiceBoxes(img):
     blocks = np.vsplit(img, 6)
     boxes = []
-    for i in range(6):
-        rows = np.vsplit(blocks[i][5:70, :], 5)
-        for j in range(5):
-            cols = np.hsplit(rows[j], 4)
-            line = []
-            for k in range(4):
-                line.append(cols[k])
-            boxes.append(line)
+    # 第一部分
+    rows = np.vsplit(blocks[0][5:70, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第二部分
+    rows = np.vsplit(blocks[1][5:75, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第三部分
+    rows = np.vsplit(blocks[2][5:75, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第四部分
+    rows = np.vsplit(blocks[3][10:75, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第五部分
+    rows = np.vsplit(blocks[4][10:80, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第六部分
+    rows = np.vsplit(blocks[5][10:80, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
     return boxes
 
 
@@ -121,15 +161,81 @@ def splitTheFirstThreeColumnChoiceBoxes(img):
 def splitTheFourthColumnChoiceBoxes(img):
     blocks = np.vsplit(img, 3)
     boxes = []
-    for i in range(3):
-        rows = np.vsplit(blocks[i][5:140, :], 5)
-        for j in range(5):
-            cols = np.hsplit(rows[j], 4)
-            line = []
-            for k in range(4):
-                line.append(cols[k])
-            boxes.append(line)
+    # 第一部分
+    rows = np.vsplit(blocks[0][10:140, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第二部分
+    rows = np.vsplit(blocks[1][10:140, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+    # 第三部分
+    rows = np.vsplit(blocks[2][15:145, :], 5)
+    for j in range(5):
+        cols = np.hsplit(rows[j], 4)
+        line = []
+        for k in range(4):
+            line.append(cols[k])
+        boxes.append(line)
+
     return boxes
+
+
+# 姓名栏,准考证栏,缺考栏填涂检测
+def detectNameAdmissionMiss(darryBoxes, number, optionNumber):
+    choice = []
+    for i in range(number):
+        id = -1
+        min = -1
+        for j in range(optionNumber):
+            if cv.countNonZero(darryBoxes[i][j]) >= min:
+                min = cv.countNonZero(darryBoxes[i][j])
+                id = j
+        choice.append(id)
+    return choice
+
+
+# 单选填涂检测
+def detectSingleChoice(darryBoxes, number, optionNumber, numberToLetter):
+    choice = []
+    choiceLetter = []
+    for i in range(number):
+        id = -1
+        min = -1
+        for j in range(optionNumber):
+            if cv.countNonZero(darryBoxes[i][j]) >= min:
+                min = cv.countNonZero(darryBoxes[i][j])
+                id = j
+        choice.append(id)
+    for i in choice:
+        choiceLetter.append(numberToLetter[i])
+    return choiceLetter
+
+
+# 多选填涂检测
+def detectMultipleChoice(darryBoxes, number, optionNumber, numberToLetter):
+    choice = []
+    choiceLetter = []
+    for i in range(number):
+        listChoice = []
+        for j in range(optionNumber):
+            if cv.countNonZero(darryBoxes[i][j]) >= 100:
+                listChoice.append(j)
+        choice.append(listChoice)
+    for choice in choice:
+        strChoice = ""
+        for i in choice:
+            strChoice += numberToLetter[i]
+        choiceLetter.append(strChoice)
+    return choiceLetter
 
 
 if __name__ == "__main__":
