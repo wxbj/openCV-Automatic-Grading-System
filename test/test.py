@@ -3,27 +3,22 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from ui.initialWindow import Ui_initialWindow
-from ui.initialWindow import Ui_initialWindow
-from ui.initialWindow import Ui_initialWindow
-from ui.initialWindow import Ui_initialWindow
+from ui.inputAnswerWindow import Ui_inputAnswerWindow
+from ui.inputReplyWindow import Ui_inputReplyWindow
+from ui.gradingPaperWondow import Ui_gradingPaperWindow
+from ui.menuWindow import Ui_menuWindow
 
 
 class menuWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.ui =
+        self.ui = Ui_menuWindow()
+        initialWindow = Ui_initialWindow()
+        inputAnswerWindow = Ui_inputAnswerWindow()
+        inputReplyWindow = Ui_inputReplyWindow()
+        gradingPaperWindow = Ui_gradingPaperWindow()
         self.ui.setupUi(self)
-        # 调用监听函数
-        self.controller()
         self.show()
-
-    # 监听事件都放在这里面
-    def controller(self):
-        self.ui.actionInputAnswer.triggered.connect(self.actionInputAnswer)
-
-    def actionInputAnswer(self):
-        self.ui.lableResult.setText("答案")
-        self.ui.statusbar.showMessage("读入成功")
 
 
 if __name__ == "__main__":
