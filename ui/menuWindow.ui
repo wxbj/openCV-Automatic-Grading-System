@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>menuWindow</class>
+ <widget class="QMainWindow" name="menuWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>732</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>-2</x>
+      <y>-1</y>
+      <width>901</width>
+      <height>681</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="pageInputAnswer"/>
+    <widget class="QWidget" name="pageInputReply"/>
+    <widget class="QWidget" name="pageGradingPaper"/>
+    <widget class="QWidget" name="pageInitial"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>900</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>菜单</string>
+    </property>
+    <addaction name="acttionInputAnswer"/>
+    <addaction name="actionInputReply"/>
+    <addaction name="actionkaishiyuejuan"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="acttionInputAnswer">
+   <property name="text">
+    <string>读入答案</string>
+   </property>
+  </action>
+  <action name="actionInputReply">
+   <property name="text">
+    <string>读入试卷</string>
+   </property>
+  </action>
+  <action name="actionkaishiyuejuan">
+   <property name="text">
+    <string>开始阅卷</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

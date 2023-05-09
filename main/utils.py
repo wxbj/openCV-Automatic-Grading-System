@@ -236,7 +236,3 @@ def detectMultipleChoice(darryBoxes, number, optionNumber, numberToLetter):
             strChoice += numberToLetter[i]
         choiceLetter.append(strChoice)
     return choiceLetter
-
-
-if __name__ == "__main__":
-    pass
