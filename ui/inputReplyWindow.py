@@ -17,6 +17,9 @@ class Ui_inputReplyWindow(object):
         inputReplyWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(inputReplyWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(270, 180, 72, 15))
+        self.label.setObjectName("label")
         inputReplyWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(inputReplyWindow)
@@ -25,3 +28,4 @@ class Ui_inputReplyWindow(object):
     def retranslateUi(self, inputReplyWindow):
         _translate = QtCore.QCoreApplication.translate
         inputReplyWindow.setWindowTitle(_translate("inputReplyWindow", "MainWindow"))
+        self.label.setText(_translate("inputReplyWindow", "输入问题回答"))

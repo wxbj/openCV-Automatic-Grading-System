@@ -9,16 +9,61 @@ from ui.gradingPaperWondow import Ui_gradingPaperWindow
 from ui.menuWindow import Ui_menuWindow
 
 
-class menuWindow(QMainWindow):
+class initialWindow(QMainWindow, Ui_initialWindow):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_menuWindow()
-        initialWindow = Ui_initialWindow()
-        inputAnswerWindow = Ui_inputAnswerWindow()
-        inputReplyWindow = Ui_inputReplyWindow()
-        gradingPaperWindow = Ui_gradingPaperWindow()
-        self.ui.setupUi(self)
+        self.setupUi(self)
+
+
+class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+class inputReplyWindow(QMainWindow, Ui_inputReplyWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+class menuWindow(QMainWindow, Ui_menuWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.inputAnswerWindow = inputAnswerWindow()
+        self.initialWindow = initialWindow()
+        self.inputReplyWindow = inputReplyWindow()
+        self.gradingPaperWindow = gradingPaperWindow()
+
+        number = self.stackedWidget.addWidget(self.initialWindow)
+        self.stackedWidget.setCurrentIndex(number)
+
+        self.controller()
         self.show()
+
+    def controller(self):
+        self.actionInputAnswer.triggered.connect(self.inputAnswer)
+        self.actionInputReply.triggered.connect(self.inputReply)
+        self.actionGradingPaper.triggered.connect(self.gradingPaper)
+
+    def inputAnswer(self):
+        number = self.stackedWidget.addWidget(self.inputAnswerWindow)
+        self.stackedWidget.setCurrentIndex(number)
+
+    def inputReply(self):
+        number = self.stackedWidget.addWidget(self.inputReplyWindow)
+        self.stackedWidget.setCurrentIndex(number)
+
+    def gradingPaper(self):
+        number = self.stackedWidget.addWidget(self.gradingPaperWindow)
+        self.stackedWidget.setCurrentIndex(number)
 
 
 if __name__ == "__main__":

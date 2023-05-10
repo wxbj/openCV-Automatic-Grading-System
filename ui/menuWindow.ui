@@ -45,14 +45,14 @@
     <property name="title">
      <string>菜单</string>
     </property>
-    <addaction name="acttionInputAnswer"/>
+    <addaction name="actionInputAnswer"/>
     <addaction name="actionInputReply"/>
-    <addaction name="actionkaishiyuejuan"/>
+    <addaction name="actionGradingPaper"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="acttionInputAnswer">
+  <action name="actionInputAnswer">
    <property name="text">
     <string>读入答案</string>
    </property>
@@ -62,7 +62,7 @@
     <string>读入试卷</string>
    </property>
   </action>
-  <action name="actionkaishiyuejuan">
+  <action name="actionGradingPaper">
    <property name="text">
     <string>开始阅卷</string>
    </property>

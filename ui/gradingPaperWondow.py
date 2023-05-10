@@ -17,6 +17,9 @@ class Ui_gradingPaperWindow(object):
         gradingPaperWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(gradingPaperWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(230, 200, 72, 15))
+        self.label.setObjectName("label")
         gradingPaperWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(gradingPaperWindow)
@@ -25,3 +28,4 @@ class Ui_gradingPaperWindow(object):
     def retranslateUi(self, gradingPaperWindow):
         _translate = QtCore.QCoreApplication.translate
         gradingPaperWindow.setWindowTitle(_translate("gradingPaperWindow", "MainWindow"))
+        self.label.setText(_translate("gradingPaperWindow", "显示分数"))
