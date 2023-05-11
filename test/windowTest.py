@@ -11,6 +11,7 @@ from ui.gradingPaperWondow import Ui_gradingPaperWindow
 from ui.menuWindow import Ui_menuWindow
 from utils.windowUtil import *
 
+
 answer = {}
 replys = {}
 replyUrls = []
