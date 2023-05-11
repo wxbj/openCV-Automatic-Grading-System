@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="labelInitialText">
     <property name="geometry">
      <rect>
       <x>1</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">#label{
+     <string notr="true">#labelInitialText{
 font: 18pt &quot;宋体&quot;;
 
 }

@@ -14,17 +14,27 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QPushButton" name="pushButtonReply">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>180</y>
-      <width>72</width>
-      <height>15</height>
+      <x>610</x>
+      <y>40</y>
+      <width>93</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>输入问题回答</string>
+     <string>选择试卷</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEditReply">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>751</width>
+      <height>471</height>
+     </rect>
     </property>
    </widget>
   </widget>

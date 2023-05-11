@@ -17,14 +17,14 @@ class Ui_initialWindow(object):
         initialWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(initialWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(1, 4, 791, 581))
-        self.label.setStyleSheet("#label{\n"
+        self.labelInitialText = QtWidgets.QLabel(self.centralwidget)
+        self.labelInitialText.setGeometry(QtCore.QRect(1, 4, 791, 581))
+        self.labelInitialText.setStyleSheet("#labelInitialText{\n"
 "font: 18pt \"宋体\";\n"
 "\n"
 "}\n"
 "")
-        self.label.setObjectName("label")
+        self.labelInitialText.setObjectName("labelInitialText")
         initialWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(initialWindow)
@@ -33,7 +33,7 @@ class Ui_initialWindow(object):
     def retranslateUi(self, initialWindow):
         _translate = QtCore.QCoreApplication.translate
         initialWindow.setWindowTitle(_translate("initialWindow", "MainWindow"))
-        self.label.setText(_translate("initialWindow", "优美胜于丑陋\n"
+        self.labelInitialText.setText(_translate("initialWindow", "优美胜于丑陋\n"
 "明了胜于晦涩\n"
 "简洁胜于复杂\n"
 "复杂胜于凌乱\n"
