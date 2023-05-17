@@ -28,7 +28,7 @@ def getContourChoice(contours):
     contoursRect = []
     for contour in contours:
         area = cv.contourArea(contour)
-        if area > 10000:
+        if 10000 < area < 100000:
             perimeter = cv.arcLength(contour, True)
             approx = cv.approxPolyDP(contour, 0.02 * perimeter, True)
             if len(approx) == 4:
@@ -89,8 +89,8 @@ def splitAdmissionBoxes(img):
     return boxes
 
 
-# 缺考栏选项的划分
-def splitMissExamBoxes(img):
+# 主观题和科目栏选项的划分
+def splitSubjectiveQuestionsAndSubject(img):
     cols = np.hsplit(img, 5)
     boxes = []
     for i in range(5):
@@ -189,17 +189,26 @@ def splitTheFourthColumnChoiceBoxes(img):
     return boxes
 
 
-# 姓名栏,准考证栏,缺考栏填涂检测
-def detectNameAdmissionMiss(darryBoxes, number, optionNumber):
+# 姓名栏、准考证栏、主观题栏、考试科目栏填涂检测
+def detectNameAdmissionSubject(darryBoxes, number, optionNumber):
     choice = []
     for i in range(number):
         id = -1
-        min = -1
+        max = -1
         for j in range(optionNumber):
-            if cv.countNonZero(darryBoxes[i][j]) >= min:
-                min = cv.countNonZero(darryBoxes[i][j])
+            if cv.countNonZero(darryBoxes[i][j]) >= max:
+                max = cv.countNonZero(darryBoxes[i][j])
                 id = j
-        choice.append(id)
+        if max >= 200:
+            choice.append(id)
+    return choice
+
+
+# 缺考栏填涂检测
+def detectMissExam(darryBoxes, number):
+    choice = ["否"]
+    if cv.countNonZero(darryBoxes[number]) >= 100:
+        choice = ["是"]
     return choice
 
 
@@ -209,12 +218,24 @@ def detectSingleChoice(darryBoxes, number, optionNumber, numberToLetter):
     choiceLetter = []
     for i in range(number):
         id = -1
-        min = -1
+        max = -1
+        number = 0  # 用于检测多选
         for j in range(optionNumber):
-            if cv.countNonZero(darryBoxes[i][j]) >= min:
-                min = cv.countNonZero(darryBoxes[i][j])
-                id = j
-        choice.append(id)
+            if cv.countNonZero(darryBoxes[i][j]) >= max:
+                max = cv.countNonZero(darryBoxes[i][j])
+                if max >= 200:  # 若有多个选中，要记录下来
+                    number += 1
+                if number == 2:  # 多选，直接跳出本次循环
+                    id = -1
+                    break
+                else:
+                    id = j
+        if number == 2:  # 多选
+            choice.append(id)
+        elif max >= 200:  # 正常选择
+            choice.append(id)
+        else:  # 空选
+            choice.append(-1)
     for i in choice:
         choiceLetter.append(numberToLetter[i])
     return choiceLetter

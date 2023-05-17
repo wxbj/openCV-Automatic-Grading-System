@@ -48,6 +48,7 @@
     <addaction name="actionInputAnswer"/>
     <addaction name="actionInputReply"/>
     <addaction name="actionGradingPaper"/>
+    <addaction name="actionOutputExcel"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -65,6 +66,11 @@
   <action name="actionGradingPaper">
    <property name="text">
     <string>开始阅卷</string>
+   </property>
+  </action>
+  <action name="actionOutputExcel">
+   <property name="text">
+    <string>导出为Excel</string>
    </property>
   </action>
  </widget>

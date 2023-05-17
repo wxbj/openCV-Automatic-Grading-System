@@ -2,6 +2,7 @@
   <dictionary name="weizh">
     <words>
       <w>baidu</w>
+      <w>cout</w>
       <w>darry</w>
       <w>datika</w>
       <w>imshow</w>
@@ -10,6 +11,7 @@
       <w>replys</w>
       <w>syncdisk</w>
       <w>threshs</w>
+      <w>xlsx</w>
     </words>
   </dictionary>
 </component>

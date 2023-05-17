@@ -48,9 +48,12 @@ class Ui_menuWindow(object):
         self.actionInputReply.setObjectName("actionInputReply")
         self.actionGradingPaper = QtWidgets.QAction(menuWindow)
         self.actionGradingPaper.setObjectName("actionGradingPaper")
+        self.actionOutputExcel = QtWidgets.QAction(menuWindow)
+        self.actionOutputExcel.setObjectName("actionOutputExcel")
         self.menu.addAction(self.actionInputAnswer)
         self.menu.addAction(self.actionInputReply)
         self.menu.addAction(self.actionGradingPaper)
+        self.menu.addAction(self.actionOutputExcel)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(menuWindow)
@@ -64,3 +67,4 @@ class Ui_menuWindow(object):
         self.actionInputAnswer.setText(_translate("menuWindow", "读入答案"))
         self.actionInputReply.setText(_translate("menuWindow", "读入试卷"))
         self.actionGradingPaper.setText(_translate("menuWindow", "开始阅卷"))
+        self.actionOutputExcel.setText(_translate("menuWindow", "导出为Excel"))
