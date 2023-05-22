@@ -1,27 +1,52 @@
 import os
-import sys
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QTableView
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QTableView, QLabel
 
 from ui.initialWindow import Ui_initialWindow
 from ui.inputAnswerWindow import Ui_inputAnswerWindow
 from ui.inputReplyWindow import Ui_inputReplyWindow
 from ui.gradingPaperWondow import Ui_gradingPaperWindow
+from ui.blurImageProcessingWindow import Ui_blurImageProcessingWindow
 from ui.menuWindow import Ui_menuWindow
+from ui.basicParameterSettingsWindow import Ui_basicParameterSettingsWindow
 from test.windowUtilTest import *
 
-answer = {}
-replyUrls = []
-gradings = []
+answer = {}  # 存放答案列表
+replyUrls = []  # 存放学生列表
+gradings = []  # 存放学生成绩
 
 
+# 初始界面，用于用户登录的显示内容
 class initialWindow(QMainWindow, Ui_initialWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
 
+# 设定基本参数
+class basicParameterSettingsWindow(QMainWindow, Ui_basicParameterSettingsWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.fileAddress = ''
+        self.pushButtonBasicParameterChoice.clicked.connect(self.basicParameterAddress)
+        self.pushButtonStartAdjust.clicked.connect(self.startAdjust)
+
+    def basicParameterAddress(self):
+        self.fileAddress = QFileDialog.getOpenFileName(self, '选择文件',
+                                                       'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
+                                                       "Image files (*.jpg *.gif *.png)")[0]
+        self.lineEditBasicParameterAddress.setText(self.fileAddress)
+
+    def startAdjust(self):
+        filePath = getBasicParameter(self.fileAddress)
+
+        self.labelBasicParameterImage.setPixmap(QtGui.QPixmap(filePath))
+        self.labelBasicParameterImage.setScaledContents(True)
+
+
+# 从图片读入答案
 class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
     def __init__(self):
         super().__init__()
@@ -48,6 +73,7 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
         self.textEditAnswer.setText(answerStr)
 
 
+# 从文件夹读入试卷
 class inputReplyWindow(QMainWindow, Ui_inputReplyWindow):
     def __init__(self):
         super().__init__()
@@ -69,6 +95,7 @@ class inputReplyWindow(QMainWindow, Ui_inputReplyWindow):
         self.textEditReply.setText(replyStr)
 
 
+# 评分
 class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
     def __init__(self):
         super().__init__()
@@ -89,14 +116,24 @@ class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
                 self.tableWidgetGrading.setItem(row, j, item)
 
 
+# 模糊图像处理
+class blurImageProcessingWindow(QMainWindow, Ui_blurImageProcessingWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+# 菜单栏
 class menuWindow(QMainWindow, Ui_menuWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.inputAnswerWindow = inputAnswerWindow()
         self.initialWindow = initialWindow()
+        self.inputAnswerWindow = inputAnswerWindow()
         self.inputReplyWindow = inputReplyWindow()
         self.gradingPaperWindow = gradingPaperWindow()
+        self.blurImageProcessingWindow = blurImageProcessingWindow()
+        self.basicParameterSettingsWindow = basicParameterSettingsWindow()
 
         number = self.stackedWidget.addWidget(self.initialWindow)
         self.stackedWidget.setCurrentIndex(number)
@@ -109,6 +146,8 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.actionInputReply.triggered.connect(self.inputReply)
         self.actionGradingPaper.triggered.connect(self.gradingPaper)
         self.actionOutputExcel.triggered.connect(self.outputExcel)
+        self.menuBlurImageProcessing.triggered.connect(self.blurImageProcessing)
+        self.actionBasicParameterSettings.triggered.connect(self.basicParameterSettings)
 
     def inputAnswer(self):
         number = self.stackedWidget.addWidget(self.inputAnswerWindow)
@@ -126,6 +165,14 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         global gradings
         writeGradExcel(gradings)
         self.statusbar.showMessage("保存成功！")
+
+    def blurImageProcessing(self):
+        number = self.stackedWidget.addWidget(self.blurImageProcessingWindow)
+        self.stackedWidget.setCurrentIndex(number)
+
+    def basicParameterSettings(self):
+        number = self.stackedWidget.addWidget(self.basicParameterSettingsWindow)
+        self.stackedWidget.setCurrentIndex(number)
 
 
 if __name__ == "__main__":
