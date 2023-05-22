@@ -1,5 +1,5 @@
 import pandas
-from main.imageProcess import *
+from main.optionDetection import getAnswer
 
 
 # 返回评分列表

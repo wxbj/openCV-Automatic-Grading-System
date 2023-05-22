@@ -1,4 +1,4 @@
-from utils.imageUtil import *
+from utils.optionDetectionUtil import *
 
 
 def getAnswer(filePath):
