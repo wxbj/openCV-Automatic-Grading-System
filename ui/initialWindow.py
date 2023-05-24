@@ -32,7 +32,7 @@ class Ui_initialWindow(object):
 
     def retranslateUi(self, initialWindow):
         _translate = QtCore.QCoreApplication.translate
-        initialWindow.setWindowTitle(_translate("initialWindow", "MainWindow"))
+        initialWindow.setWindowTitle(_translate("initialWindow", "初始界面"))
         self.labelInitialText.setText(_translate("initialWindow", "优美胜于丑陋\n"
 "明了胜于晦涩\n"
 "简洁胜于复杂\n"

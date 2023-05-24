@@ -7,8 +7,6 @@ from main.preprocessingImage import getPreprocessedImage
 
 
 # 返回评分列表
-
-
 def getGradingLists(answer, replyUrls):
     subject = answer['考试科目栏:']
     firstColumnAnswer = answer['选择第一栏:']

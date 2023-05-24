@@ -30,5 +30,5 @@ class Ui_inputReplyWindow(object):
 
     def retranslateUi(self, inputReplyWindow):
         _translate = QtCore.QCoreApplication.translate
-        inputReplyWindow.setWindowTitle(_translate("inputReplyWindow", "MainWindow"))
+        inputReplyWindow.setWindowTitle(_translate("inputReplyWindow", "试卷读入"))
         self.pushButtonReply.setText(_translate("inputReplyWindow", "选择试卷"))

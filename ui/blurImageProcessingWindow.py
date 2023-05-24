@@ -27,5 +27,5 @@ class Ui_blurImageProcessingWindow(object):
 
     def retranslateUi(self, blurImageProcessingWindow):
         _translate = QtCore.QCoreApplication.translate
-        blurImageProcessingWindow.setWindowTitle(_translate("blurImageProcessingWindow", "MainWindow"))
+        blurImageProcessingWindow.setWindowTitle(_translate("blurImageProcessingWindow", "模糊图像处理"))
         self.label.setText(_translate("blurImageProcessingWindow", "我是模糊处理界面"))

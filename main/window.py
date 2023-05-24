@@ -12,15 +12,61 @@ from ui.blurImageProcessingWindow import Ui_blurImageProcessingWindow
 from ui.menuWindow import Ui_menuWindow
 from ui.basicParameterSettingsWindow import Ui_basicParameterSettingsWindow
 from ui.preprocessingPapersWindow import Ui_preprocessingPapersWindow
-from utils.windowUtil import *
-from main.imageTransformation import *
-from main.optionDetection import *
+from ui.displayPicture import Ui_displayPictureWindow
+from ui.examPaperSettingWindow import Ui_examPaperSettingWindow
 
-basicSettings = []  # 存放图片透视变换需要的参数
-preprocessingFolder = ''  # 预处理完成的试卷
+from utils.windowUtil import *
+from main.imageTransformation import getBasicParameter
+from main.optionDetection import getAnswer
+
+basicSettings = [106, 74, 2, 1]  # 存放图片透视变换需要的参数
+preprocessedFolder = ''  # 预处理完成的试卷夹
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
+
+
+# 图片浏览
+class displayPictureWindow(QMainWindow, Ui_displayPictureWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.choiceFolderUrl = ""
+        self.number = 0
+
+        self.pushButtonChoiceFolder.clicked.connect(self.choiceFolder)
+        self.pushButtonPrevious.clicked.connect(self.previous)
+        self.pushButtonNext.clicked.connect(self.next)
+
+    def choiceFolder(self):
+        self.choiceFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
+                                                                'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
+        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
+
+        self.labelPicture.setPixmap(
+            QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
+        self.labelPicture.setScaledContents(True)
+
+    def previous(self):
+        if self.number == 0:
+            self.number = len(os.listdir(self.choiceFolderUrl)) - 1
+        else:
+            self.number -= 1
+
+        self.labelPicture.setPixmap(
+            QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
+        self.labelPicture.setScaledContents(True)
+
+    def next(self):
+        if self.number == (len(os.listdir(self.choiceFolderUrl)) - 1):
+            self.number = 0
+        else:
+            self.number += 1
+
+        self.labelPicture.setPixmap(
+            QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
+        self.labelPicture.setScaledContents(True)
 
 
 # 初始界面，用于用户登录的显示内容
@@ -35,8 +81,10 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
         self.preprocessingPapersUrls = []
         self.img = []
+
         self.pushButtonChoiceFolder.clicked.connect(self.getFileUrls)
         self.pushButtonStartHandle.clicked.connect(self.startHandle)
         self.pushButtonSaveResult.clicked.connect(self.saveResult)
@@ -44,17 +92,13 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
     def getFileUrls(self):
         preprocessingPapersFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
                                                                         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
-
-        preprocessingPapersNames = os.listdir(preprocessingPapersFolderUrl)
-
         self.textEditPreprocessingFolder.setText(preprocessingPapersFolderUrl)
 
-        for i in preprocessingPapersNames:
-            self.preprocessingPapersUrls.append(preprocessingPapersFolderUrl + "/" + i)
-
         preprocessingPapersStr = ""
-        for i in preprocessingPapersNames:
+        for i in os.listdir(preprocessingPapersFolderUrl):
+            self.preprocessingPapersUrls.append(preprocessingPapersFolderUrl + "/" + i)
             preprocessingPapersStr = preprocessingPapersStr + preprocessingPapersFolderUrl + "/" + i + "\n"
+
         self.textEditPreprocessingFileList.setText(preprocessingPapersStr)
 
     def startHandle(self):
@@ -62,9 +106,9 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
         self.statusBarPreprocessing.showMessage("处理完成")
 
     def saveResult(self):
-        global preprocessingFolder
-        preprocessingFolder = saveResultFolder(QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
-                                               self.img)
+        global preprocessedFolder
+        preprocessedFolder = saveResultFolder(QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
+                                              self.img)
         self.statusBarPreprocessing.showMessage("保存完成")
 
 
@@ -92,6 +136,7 @@ class basicParameterSettingsWindow(QMainWindow, Ui_basicParameterSettingsWindow)
         basicSettings = result[1]
         self.labelBasicParameterImage.setPixmap(QtGui.QPixmap(result[0]))
         self.labelBasicParameterImage.setScaledContents(True)
+        os.remove(result[0])
 
 
 # 从图片读入答案
@@ -171,7 +216,14 @@ class blurImageProcessingWindow(QMainWindow, Ui_blurImageProcessingWindow):
         self.setupUi(self)
 
 
-# 菜单栏
+# 试卷设置
+class examPaperSettingWindow(QMainWindow, Ui_examPaperSettingWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
+# 主界面
 class menuWindow(QMainWindow, Ui_menuWindow):
     def __init__(self):
         super().__init__()
@@ -184,6 +236,8 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.blurImageProcessingWindow = blurImageProcessingWindow()
         self.basicParameterSettingsWindow = basicParameterSettingsWindow()
         self.preprocessingPapersWindow = preprocessingPapersWindow()
+        self.displayPictureWindow = displayPictureWindow()
+        self.examPaperSettingWindow = examPaperSettingWindow()
 
         number = self.stackedWidget.addWidget(self.initialWindow)
         self.stackedWidget.setCurrentIndex(number)
@@ -199,35 +253,37 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.menuBlurImageProcessing.triggered.connect(self.blurImageProcessing)
         self.actionBasicParameterSettings.triggered.connect(self.basicParameterSettings)
         self.actionPreprocessingPapers.triggered.connect(self.preprocessingPapers)
+        self.actionDisplayPicture.triggered.connect(self.displayPicture)
+        self.actionExamPaperSetting.triggered.connect(self.examPaperSetting)
 
     def inputAnswer(self):
-        number = self.stackedWidget.addWidget(self.inputAnswerWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.inputAnswerWindow))
 
     def inputReply(self):
-        number = self.stackedWidget.addWidget(self.inputReplyWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.inputReplyWindow))
 
     def gradingPaper(self):
-        number = self.stackedWidget.addWidget(self.gradingPaperWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.gradingPaperWindow))
 
     def outputExcel(self):
         global gradings
         writeGradExcel(gradings)
-        self.statusbar.showMessage("保存成功！")
+        self.statusBar.showMessage("保存成功！")
 
     def blurImageProcessing(self):
-        number = self.stackedWidget.addWidget(self.blurImageProcessingWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.blurImageProcessingWindow))
 
     def basicParameterSettings(self):
-        number = self.stackedWidget.addWidget(self.basicParameterSettingsWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.basicParameterSettingsWindow))
 
     def preprocessingPapers(self):
-        number = self.stackedWidget.addWidget(self.preprocessingPapersWindow)
-        self.stackedWidget.setCurrentIndex(number)
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.preprocessingPapersWindow))
+
+    def displayPicture(self):
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.displayPictureWindow))
+
+    def examPaperSetting(self):
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.examPaperSettingWindow))
 
 
 if __name__ == "__main__":
