@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>自动阅卷系统</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QStackedWidget" name="stackedWidget">
@@ -100,15 +100,16 @@
     <addaction name="action5_5"/>
     <addaction name="action6_5"/>
    </widget>
-   <widget class="QMenu" name="menu_6">
+   <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>设置</string>
     </property>
     <addaction name="actionBasicParameterSettings"/>
+    <addaction name="actionPreprocessingPapers"/>
     <addaction name="action1_8"/>
     <addaction name="action1_7"/>
    </widget>
-   <addaction name="menu_6"/>
+   <addaction name="menuSettings"/>
    <addaction name="menu_2"/>
    <addaction name="menu_5"/>
    <addaction name="menu_4"/>
@@ -116,7 +117,7 @@
    <addaction name="menuAutomaticGradingSystem"/>
    <addaction name="menuBlurImageProcessing"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionInputAnswer">
    <property name="text">
     <string>读入答案</string>
@@ -335,6 +336,11 @@
   <action name="action1_15">
    <property name="text">
     <string>1</string>
+   </property>
+  </action>
+  <action name="actionPreprocessingPapers">
+   <property name="text">
+    <string>预处理试卷</string>
    </property>
   </action>
  </widget>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>基本参数设置</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label2">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>30</y>
       <width>821</width>
-      <height>231</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -29,12 +29,13 @@ font: 18pt &quot;Adobe Devanagari&quot;;
 font: 14pt &quot;Adobe Devanagari&quot;;</string>
     </property>
     <property name="text">
-     <string>1、	由于照片的差异，需要手动调整一些参数，帮助系统更好的运行。
-2、	强度梯度小于最小阈值的必定不是边缘
-3、	强度梯度大于最大阈值的必定是边缘
-4、	扩张会连接不连续部分
-5、	侵蚀会丢弃边缘部分的像素，可能会造成不连续‘
-6、	请随机选择一批图片中的一张
+     <string>1、由于照片的差异，需要手动调整一些参数，帮助系统更好的运行。
+2、强度梯度小于minThresh的必定不是边缘
+3、强度梯度大于maxThresh的必定是边缘
+4、dilate会连接不连续部分
+5、erode会丢弃边缘部分的像素，可能会造成不连续
+6、请随机选择一批图片中的一张
+7、点击Esc退出settings界面
 </string>
     </property>
    </widget>
@@ -80,11 +81,15 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
    <widget class="QLabel" name="labelBasicParameterImage">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>330</y>
+      <x>470</x>
+      <y>360</y>
       <width>240</width>
       <height>320</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"># labelBasicParameterImage{
+rgb(255, 255, 127)}</string>
     </property>
     <property name="text">
      <string/>
@@ -101,6 +106,49 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
     </property>
     <property name="text">
      <string>开始调整</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>340</y>
+      <width>72</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>处理结果：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelOriginalBasicParameterImage">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>360</y>
+      <width>240</width>
+      <height>320</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"># labelBasicParameterImage{
+rgb(255, 255, 127)}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>72</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>原图：</string>
     </property>
    </widget>
   </widget>

@@ -1,5 +1,7 @@
 import cv2 as cv
 import numpy as np
+import pandas
+from main.optionDetection import *
 
 
 # 获取矩形区域

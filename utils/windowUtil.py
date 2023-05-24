@@ -1,8 +1,14 @@
+import os
+import sys
+import cv2 as cv
 import pandas
 from main.optionDetection import getAnswer
+from main.preprocessingImage import getPreprocessedImage
 
 
 # 返回评分列表
+
+
 def getGradingLists(answer, replyUrls):
     subject = answer['考试科目栏:']
     firstColumnAnswer = answer['选择第一栏:']
@@ -102,3 +108,41 @@ def writeGradExcel(gradings):
         data[titles[6]].append(grading[6])
     a = pandas.DataFrame(data)
     a.to_excel('grad.xlsx', sheet_name='成绩单', index=False)
+
+
+# 预处理试卷
+def preprocessingPapers(fileUrls, basicSettings):
+    images = []
+    for i in fileUrls:
+        images.append(getPreprocessedImage(i, basicSettings))
+    return images
+
+
+# 保存预处理后的试卷
+def saveResultFolder(folderName, images):
+    folder = sys.path[0][:-5] + "\img\\" + folderName
+    os.mkdir(folder)
+    for i, image in zip(range(len(images)), images):
+        cv.imencode('.jpg', image)[1].tofile(folder + f"\img{i}.jpg")
+    return folder
+
+
+if __name__ == "__main__":
+    urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img1.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img12.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img13.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img14.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img15.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img2.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img3.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img4.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img5.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img7.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img8.jpg',
+            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img9.jpg']
+    # preprocessingPapers(urls, [106, 74, 2, 1])
+    saveResultFolder("x", '')
