@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
+    <width>802</width>
     <height>710</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>821</width>
+      <width>701</width>
       <height>261</height>
      </rect>
     </property>
@@ -43,7 +43,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
+      <y>290</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -56,8 +56,8 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>280</y>
-      <width>631</width>
+      <y>290</y>
+      <width>541</width>
       <height>21</height>
      </rect>
     </property>
@@ -65,8 +65,8 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
    <widget class="QPushButton" name="pushButtonBasicParameterChoice">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>280</y>
+      <x>700</x>
+      <y>290</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -81,7 +81,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
    <widget class="QLabel" name="labelBasicParameterImage">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>420</x>
       <y>360</y>
       <width>240</width>
       <height>320</height>
@@ -98,8 +98,8 @@ rgb(255, 255, 127)}</string>
    <widget class="QPushButton" name="pushButtonStartAdjust">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>350</y>
+      <x>680</x>
+      <y>330</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -111,7 +111,7 @@ rgb(255, 255, 127)}</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>320</x>
       <y>340</y>
       <width>72</width>
       <height>15</height>
@@ -124,7 +124,7 @@ rgb(255, 255, 127)}</string>
    <widget class="QLabel" name="labelOriginalBasicParameterImage">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>60</x>
       <y>360</y>
       <width>240</width>
       <height>320</height>

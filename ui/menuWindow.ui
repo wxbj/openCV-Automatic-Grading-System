@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>914</width>
+    <width>804</width>
     <height>732</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>-2</x>
       <y>-1</y>
-      <width>911</width>
+      <width>801</width>
       <height>681</height>
      </rect>
     </property>
@@ -33,13 +33,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>914</width>
+     <width>804</width>
      <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAutomaticGradingSystem">
     <property name="title">
-     <string>自动阅卷系统</string>
+     <string>阅卷</string>
     </property>
     <addaction name="actionInputAnswer"/>
     <addaction name="actionInputReply"/>
@@ -109,11 +109,11 @@
     <addaction name="actionExamPaperSetting"/>
    </widget>
    <addaction name="menuSettings"/>
+   <addaction name="menuAutomaticGradingSystem"/>
    <addaction name="menuTools"/>
    <addaction name="menu_5"/>
    <addaction name="menu_4"/>
    <addaction name="menu_3"/>
-   <addaction name="menuAutomaticGradingSystem"/>
    <addaction name="menuBlurImageProcessing"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

@@ -24,6 +24,7 @@ preprocessedFolder = ''  # 预处理完成的试卷夹
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
+paperFormat = {}  # 设卷格式
 
 
 # 图片浏览
@@ -221,6 +222,17 @@ class examPaperSettingWindow(QMainWindow, Ui_examPaperSettingWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pushButtonAscertain.clicked.connect(self.ascertain)
+
+    def ascertain(self):
+        global paperFormat
+        paperFormat["单选题开始"] = self.comboBoxSingleFirst.currentText()
+        paperFormat["单选题终止"] = self.comboBoxSingleSecond.currentText()
+        paperFormat["单选题分值"] = self.spinBoxSingleScore.value()
+        paperFormat["多选题开始"] = self.comboBoxMultFirst.currentText()
+        paperFormat["多选题终止"] = self.comboBoxMultSecond.currentText()
+        paperFormat["多选题分值"] = self.spinBoxMultScore.value()
+        self.statusBarExamPaperSetting.showMessage("设置完成")
 
 
 # 主界面

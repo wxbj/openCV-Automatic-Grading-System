@@ -14,15 +14,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_menuWindow(object):
     def setupUi(self, menuWindow):
         menuWindow.setObjectName("menuWindow")
-        menuWindow.resize(914, 732)
+        menuWindow.resize(804, 732)
         self.centralwidget = QtWidgets.QWidget(menuWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
-        self.stackedWidget.setGeometry(QtCore.QRect(-2, -1, 911, 681))
+        self.stackedWidget.setGeometry(QtCore.QRect(-2, -1, 801, 681))
         self.stackedWidget.setObjectName("stackedWidget")
         menuWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(menuWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 914, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 804, 26))
         self.menubar.setObjectName("menubar")
         self.menuAutomaticGradingSystem = QtWidgets.QMenu(self.menubar)
         self.menuAutomaticGradingSystem.setObjectName("menuAutomaticGradingSystem")
@@ -173,11 +173,11 @@ class Ui_menuWindow(object):
         self.menuSettings.addAction(self.actionPreprocessingPapers)
         self.menuSettings.addAction(self.actionExamPaperSetting)
         self.menubar.addAction(self.menuSettings.menuAction())
+        self.menubar.addAction(self.menuAutomaticGradingSystem.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menu_5.menuAction())
         self.menubar.addAction(self.menu_4.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
-        self.menubar.addAction(self.menuAutomaticGradingSystem.menuAction())
         self.menubar.addAction(self.menuBlurImageProcessing.menuAction())
 
         self.retranslateUi(menuWindow)
@@ -187,7 +187,7 @@ class Ui_menuWindow(object):
     def retranslateUi(self, menuWindow):
         _translate = QtCore.QCoreApplication.translate
         menuWindow.setWindowTitle(_translate("menuWindow", "自动阅卷系统"))
-        self.menuAutomaticGradingSystem.setTitle(_translate("menuWindow", "自动阅卷系统"))
+        self.menuAutomaticGradingSystem.setTitle(_translate("menuWindow", "阅卷"))
         self.menuBlurImageProcessing.setTitle(_translate("menuWindow", "模糊图像复原"))
         self.menuTools.setTitle(_translate("menuWindow", "工具"))
         self.menu_3.setTitle(_translate("menuWindow", "输出"))
