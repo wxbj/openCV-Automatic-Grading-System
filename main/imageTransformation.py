@@ -45,7 +45,6 @@ def getBasicParameter(filePath):
     pt2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])
     matrix = cv.getPerspectiveTransform(pt1, pt2)
     imgWarpColoreds = cv.warpPerspective(img, matrix, (widthImg, heightImg))
-
     cv.destroyAllWindows()
 
     cv.imwrite(sys.path[0] + r"\temp.png", imgWarpColoreds)
@@ -54,4 +53,4 @@ def getBasicParameter(filePath):
 
 
 if __name__ == "__main__":
-    getBasicParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\camera\img1.jpg')
+    getBasicParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg')

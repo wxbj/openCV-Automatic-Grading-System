@@ -1,15 +1,13 @@
-import cv2 as cv
-import sys
 from utils.optionDetectionUtil import *
 
 
-def getAnswer(filePath):
+def getAnswer(filePath, paperOption):
     ####################################
     path = filePath  # 图片地址
     widthImg = 720  # 图片宽度
     heightImg = 960  # 图片长度
-    firstThreeColumnsQuestionNumber = 30  # 前三栏问题数
-    lastColumnQuestionNumber = 15  # 最后一栏问题数
+    singleChoiceNumber = paperOption["单选题终止"] - paperOption["单选题开始"] + 1  # 单选题数目
+    multChoiceNumber = paperOption["多选题终止"] - paperOption["多选题开始"] + 1  # 多选题数目
     nameColumnNumber = 12  # 姓名栏选项数
     admissionColumnNumber = 9  # 准考证号栏选项数
     missExamColumnNumber = 1  # 缺考栏选项数
@@ -17,6 +15,7 @@ def getAnswer(filePath):
     subjectColumnNumber = 2  # 考试科目栏选项数
     questionOptionNumber = 4  # 选择问题选项数
     otherOptionNumber = 10  # 其他选项数
+    choiceBoxes = [[]]  # 全部问题，为了选项从1开始，所以有初始空列表
     numberToLetter = {-1: "错填", 0: "A", 1: "B", 2: "C", 3: "D"}  # 数字对应的字母
     answerSheet = {}  # 答题卡
     ####################################
@@ -48,10 +47,10 @@ def getAnswer(filePath):
     cv.drawContours(maskChoice, [contoursRect[0]], -1, (255, 255, 255), -1)
     imgGrayChoice = cv.bitwise_and(imgGray, imgGray, mask=maskChoice)
 
-    imgCannyChoice = cv.Canny(imgGrayChoice, 100, 200)
+    imgCannyChoice = cv.Canny(imgGrayChoice, 50, 200)
 
-    kernel = np.ones((3, 3), np.uint8)
-    dilate = cv.dilate(imgCannyChoice, kernel, iterations=1)
+    kernel = np.ones((2, 2), np.uint8)
+    dilate = cv.dilate(imgCannyChoice, kernel, iterations=2)
     erosion = cv.erode(dilate, kernel, iterations=1)
 
     contoursChoice = cv.findContours(erosion, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)[0]
@@ -80,7 +79,7 @@ def getAnswer(filePath):
     # 简单阈值
     imgThreshs = {}
     for key, imgWarpColored in imgWarpColoreds.items():
-        imgThreshs[key] = cv.threshold(imgWarpColored, 80, 255, cv.THRESH_BINARY_INV)[1]
+        imgThreshs[key] = cv.threshold(imgWarpColored, 150, 255, cv.THRESH_BINARY_INV)[1]
 
     # 划分姓名栏（12，10）
     darryNameBoxes = splitNameBoxes(imgThreshs["contourName"][120:, 30:])
@@ -105,6 +104,15 @@ def getAnswer(filePath):
     # 划分选项第四栏（15，4）
     darryFourColumnChoiceBoxes = splitTheFourthColumnChoiceBoxes(
         imgThreshs["fourColumnChoiceContour"][:, 100:])
+    # 全部选择题整理
+    for i in darryFirstColumnChoiceBoxes:
+        choiceBoxes.append(i)
+    for i in darrySecondColumnChoiceBoxes:
+        choiceBoxes.append(i)
+    for i in darryThirdColumnChoiceBoxes:
+        choiceBoxes.append(i)
+    for i in darryFourColumnChoiceBoxes:
+        choiceBoxes.append(i)
 
     # 姓名栏填涂检测
     choiceName = detectNameAdmissionSubject(darryNameBoxes, nameColumnNumber, otherOptionNumber)
@@ -123,23 +131,18 @@ def getAnswer(filePath):
     # 考试科目栏填涂检测
     choiceSubject = detectNameAdmissionSubject(darrySubjectBoxes, subjectColumnNumber, otherOptionNumber)
     answerSheet["考试科目栏:"] = choiceSubject
-    # 选择第一栏填涂检测
-    choiceFirstColumnLetter = detectSingleChoice(darryFirstColumnChoiceBoxes, firstThreeColumnsQuestionNumber,
-                                                 questionOptionNumber, numberToLetter)
-    answerSheet["选择第一栏:"] = choiceFirstColumnLetter
-    # 选择第二栏填涂检测
-    choiceSecondColumnLetter = detectSingleChoice(darrySecondColumnChoiceBoxes, firstThreeColumnsQuestionNumber,
-                                                  questionOptionNumber, numberToLetter)
-    answerSheet["选择第二栏:"] = choiceSecondColumnLetter
-    # 选择第三栏填涂检测
-    choiceThirdColumnLetter = detectMultipleChoice(darryThirdColumnChoiceBoxes, firstThreeColumnsQuestionNumber,
-                                                   questionOptionNumber, numberToLetter)
-    answerSheet["选择第三栏:"] = choiceThirdColumnLetter
-    # 选择第四栏填涂检测
-    choiceFourColumnLetter = detectMultipleChoice(darryFourColumnChoiceBoxes, lastColumnQuestionNumber,
-                                                  questionOptionNumber, numberToLetter)
-    answerSheet["选择第四栏:"] = choiceFourColumnLetter
-
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    # 单选填涂检测
+    singleChoiceBoxes = choiceBoxes[paperOption["单选题开始"]:paperOption["单选题终止"] + 1]
+    answerSheet["单选题:"] = detectSingleChoice(singleChoiceBoxes, singleChoiceNumber,
+                                             questionOptionNumber, numberToLetter)
+    # 多选填涂检测
+    multChoiceBoxes = choiceBoxes[paperOption["多选题开始"]:paperOption["多选题终止"] + 1]
+    answerSheet["多选题:"] = detectMultipleChoice(multChoiceBoxes, multChoiceNumber,
+                                               questionOptionNumber, numberToLetter)
     return answerSheet
+
+
+if __name__ == "__main__":
+    paperOptions = {'单选题开始': 1, '单选题终止': 30, '单选题分值': 1, '多选题开始': 100, '多选题终止': 105, '多选题分值': 2}
+    answer = getAnswer(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\prepore\img0.jpg", paperOptions)
+    print(answer)

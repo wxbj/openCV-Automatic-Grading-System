@@ -34,4 +34,5 @@ def getPreprocessedImage(filePath, basicSettings):
 
 
 if __name__ == "__main__":
-    getPreprocessedImage(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\camera\img1.jpg')
+    basicSetting = [106, 74, 2, 1]
+    getPreprocessedImage(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg', basicSetting)

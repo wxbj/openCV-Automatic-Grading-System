@@ -2,22 +2,37 @@ import os
 import sys
 import cv2 as cv
 import pandas
+import shutil
 from main.optionDetection import getAnswer
 from main.preprocessingImage import getPreprocessedImage
+from PIL import Image, ImageOps
+import numpy as np
+
+
+# 解决图像自动翻转的问题
+def solveAutomaticRotationOfImage(imageFolderPath):
+    imgs = []
+    imgName = []
+    for i in range(len(os.listdir(imageFolderPath))):
+        img = Image.open(imageFolderPath + "\\" + os.listdir(imageFolderPath)[i]).convert('RGB')
+        imgs.append(np.array(ImageOps.exif_transpose(img))[:, :, ::-1])
+        imgName.append(imageFolderPath + "\\" + os.listdir(imageFolderPath)[i])
+    shutil.rmtree(imageFolderPath)
+    os.mkdir(imageFolderPath)
+    for img, imgName in zip(imgs, imgName):
+        cv.imwrite(imgName, img)
 
 
 # 返回评分列表
-def getGradingLists(answer, replyUrls):
+def getGradingLists(answer, replyUrls, paperOption):
     subject = answer['考试科目栏:']
-    firstColumnAnswer = answer['选择第一栏:']
-    secondColumnAnswer = answer['选择第二栏:']
-    thirdColumnAnswer = answer['选择第三栏:']
-    fourthColumnAnswer = answer['选择第四栏:']
+    singleChoiceAnswer = answer['单选题:']
+    multChoiceAnswer = answer['多选题:']
 
     replys = []
     for replyUrl in replyUrls:
         try:
-            replys.append(getAnswer(replyUrl))
+            replys.append(getAnswer(replyUrl, paperOption))
             continue
         except Exception:
             continue
@@ -28,13 +43,9 @@ def getGradingLists(answer, replyUrls):
         if (reply['考试科目栏:'] == subject) and (reply['缺考栏:'] == ['否']):
             student.append(''.join('%s' % id for id in reply["准考证号栏:"]))
             student.append(''.join('%s' % id for id in reply["姓名栏:"]))
-            firstColumnGrading = getSingleChoiceGrad(firstColumnAnswer, reply["选择第一栏:"])
-            secondColumnGrading = getSingleChoiceGrad(secondColumnAnswer, reply["选择第二栏:"])
-            singleChoiceGrad = firstColumnGrading + secondColumnGrading
+            singleChoiceGrad = getSingleChoiceGrad(singleChoiceAnswer, reply["单选题:"], paperOption['单选题分值'])
             student.append(singleChoiceGrad)
-            thirdColumnGrading = getMultipleChoiceGrad(thirdColumnAnswer, reply["选择第三栏:"])
-            fourthColumnGrading = getMultipleChoiceGrad(fourthColumnAnswer, reply["选择第四栏:"])
-            multipleChoiceGrad = thirdColumnGrading + fourthColumnGrading
+            multipleChoiceGrad = getMultipleChoiceGrad(multChoiceAnswer, reply["多选题:"], paperOption['多选题分值'])
             student.append(multipleChoiceGrad)
             subjectiveGrad = int(''.join('%s' % id for id in reply["主观题栏:"]))
             student.append(subjectiveGrad)
@@ -73,20 +84,20 @@ def getGradingLists(answer, replyUrls):
 
 
 # 单选题判分
-def getSingleChoiceGrad(Answer, reply):
+def getSingleChoiceGrad(Answer, reply, score):
     grade = 0
     for i, j in zip(Answer, reply):
         if i == j:
-            grade += 0.5
+            grade += score
     return grade
 
 
 # 多选题判分
-def getMultipleChoiceGrad(Answer, reply):
+def getMultipleChoiceGrad(Answer, reply, score):
     grade = 0
     for i, j in zip(Answer, reply):
         if i == j:
-            grade += 1
+            grade += score
     return grade
 
 
@@ -121,26 +132,27 @@ def saveResultFolder(folderName, images):
     folder = sys.path[0][:-5] + "\img\\" + folderName
     os.mkdir(folder)
     for i, image in zip(range(len(images)), images):
-        cv.imencode('.jpg', image)[1].tofile(folder + f"\img{i}.jpg")
+        cv.imencode('.jpg', image)[1].tofile(folder + f"\img{i+1}.jpg")
     return folder
 
 
 if __name__ == "__main__":
-    urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img1.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img12.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img13.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img14.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img15.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img2.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img3.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img4.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img5.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img7.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img8.jpg',
-            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img9.jpg']
-    # preprocessingPapers(urls, [106, 74, 2, 1])
-    saveResultFolder("x", '')
+    # urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img1.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img12.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img13.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img14.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img15.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img2.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img3.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img4.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img5.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img7.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img8.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img9.jpg']
+    # # preprocessingPapers(urls, [106, 74, 2, 1])
+    # saveResultFolder("x", '')
+    solveAutomaticRotationOfImage(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\testNormal")

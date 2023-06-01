@@ -24,7 +24,7 @@ preprocessedFolder = ''  # 预处理完成的试卷夹
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
-paperFormat = {}  # 设卷格式
+paperOption = {}  # 设卷格式
 
 
 # 图片浏览
@@ -43,10 +43,13 @@ class displayPictureWindow(QMainWindow, Ui_displayPictureWindow):
     def choiceFolder(self):
         self.choiceFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
                                                                 'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
-        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
+
+        solveAutomaticRotationOfImage(self.choiceFolderUrl)
+
+        self.textEditFileUrl.setText(self.choiceFolderUrl + "/" + os.listdir(self.choiceFolderUrl)[self.number])
 
         self.labelPicture.setPixmap(
-            QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
+            QtGui.QPixmap(self.choiceFolderUrl + "/" + os.listdir(self.choiceFolderUrl)[self.number]))
         self.labelPicture.setScaledContents(True)
 
     def previous(self):
@@ -54,6 +57,7 @@ class displayPictureWindow(QMainWindow, Ui_displayPictureWindow):
             self.number = len(os.listdir(self.choiceFolderUrl)) - 1
         else:
             self.number -= 1
+        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
 
         self.labelPicture.setPixmap(
             QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
@@ -64,6 +68,7 @@ class displayPictureWindow(QMainWindow, Ui_displayPictureWindow):
             self.number = 0
         else:
             self.number += 1
+        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
 
         self.labelPicture.setPixmap(
             QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
@@ -154,9 +159,10 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
         self.lineEditAddress.setText(fileAddress)
 
         global answer
-        answer = getAnswer(fileAddress)
+        global paperOption
+        answer = getAnswer(fileAddress, paperOption)
         answerStr = ""
-        keys = ["考试科目栏:", "选择第一栏:", "选择第二栏:", "选择第三栏:", "选择第四栏:"]
+        keys = ["考试科目栏:", "单选题:", "多选题:"]
         for key, value in answer.items():
             if key in keys:
                 answerStr += key
@@ -200,7 +206,8 @@ class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
         global answer
         global replyUrls
         global gradings
-        gradings = getGradingLists(answer, replyUrls)
+        gradings = getGradingLists(answer, replyUrls, paperOption)
+        print(gradings)
         for grading in gradings:
             row = self.tableWidgetGrading.rowCount()
             self.tableWidgetGrading.insertRow(row)
@@ -225,13 +232,13 @@ class examPaperSettingWindow(QMainWindow, Ui_examPaperSettingWindow):
         self.pushButtonAscertain.clicked.connect(self.ascertain)
 
     def ascertain(self):
-        global paperFormat
-        paperFormat["单选题开始"] = self.comboBoxSingleFirst.currentText()
-        paperFormat["单选题终止"] = self.comboBoxSingleSecond.currentText()
-        paperFormat["单选题分值"] = self.spinBoxSingleScore.value()
-        paperFormat["多选题开始"] = self.comboBoxMultFirst.currentText()
-        paperFormat["多选题终止"] = self.comboBoxMultSecond.currentText()
-        paperFormat["多选题分值"] = self.spinBoxMultScore.value()
+        global paperOption
+        paperOption["单选题开始"] = int(self.comboBoxSingleFirst.currentText())
+        paperOption["单选题终止"] = int(self.comboBoxSingleSecond.currentText())
+        paperOption["单选题分值"] = int(self.spinBoxSingleScore.value())
+        paperOption["多选题开始"] = int(self.comboBoxMultFirst.currentText())
+        paperOption["多选题终止"] = int(self.comboBoxMultSecond.currentText())
+        paperOption["多选题分值"] = int(self.spinBoxMultScore.value())
         self.statusBarExamPaperSetting.showMessage("设置完成")
 
 
