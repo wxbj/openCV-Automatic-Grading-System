@@ -15,10 +15,10 @@ from ui.displayPicture import Ui_displayPictureWindow
 from ui.examPaperSettingWindow import Ui_examPaperSettingWindow
 
 from utils.windowUtil import *
-from main.imageTransformation import getBasicParameter
+from main.imageTransformation import getParameter
 from main.optionDetection import getAnswer
 
-basicSettings = [106, 74, 2, 1]  # 存放图片透视变换需要的参数
+perspectiveTransformation = []  # 存放图片透视变换需要的参数
 preprocessedFolder = ''  # 预处理完成的试卷夹
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
@@ -111,7 +111,7 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
         self.textEditPreprocessingFileList.setText(preprocessingPapersStr)
 
     def startHandle(self):
-        self.img = preprocessingPapers(self.preprocessingPapersUrls, basicSettings)
+        self.img = preprocessingPapers(self.preprocessingPapersUrls, perspectiveTransformation)
         self.statusBarPreprocessing.showMessage("处理完成")
 
     def saveResult(self):
@@ -121,31 +121,42 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
         self.statusBarPreprocessing.showMessage("保存完成")
 
 
-# 设定基本参数
+# 透视变换
 class perspectiveTransformationWindow(QMainWindow, Ui_perspectiveTransformationWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
         self.fileAddress = ''
-        self.pushButtonBasicParameterChoice.clicked.connect(self.basicParameterAddress)
+
+        self.pushButtonpersPectiveTransformationChoice.clicked.connect(self.basicParameterAddress)
         self.pushButtonStartAdjust.clicked.connect(self.startAdjust)
 
     def basicParameterAddress(self):
         self.fileAddress = QFileDialog.getOpenFileName(self, '选择文件',
                                                        'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
                                                        "Image files (*.jpg *.gif *.png)")[0]
-        self.lineEditBasicParameterAddress.setText(self.fileAddress)
+        self.lineEditPerspectiveTransformationAddress.setText(self.fileAddress)
 
     def startAdjust(self):
-        global basicSettings
-        self.labelOriginalBasicParameterImage.setPixmap(QtGui.QPixmap(self.fileAddress))
-        self.labelOriginalBasicParameterImage.setScaledContents(True)
+        try:
+            if self.fileAddress == '':
+                self.statusBarPerspectiveTransformation.showMessage("请先选择图片")
+            else:
+                self.statusBarPerspectiveTransformation.showMessage("")
 
-        result = getBasicParameter(self.fileAddress)
-        basicSettings = result[1]
-        self.labelBasicParameterImage.setPixmap(QtGui.QPixmap(result[0]))
-        self.labelBasicParameterImage.setScaledContents(True)
-        os.remove(result[0])
+                self.labelOriginalperspectiveTransformationImage.setPixmap(QtGui.QPixmap(self.fileAddress))
+                self.labelOriginalperspectiveTransformationImage.setScaledContents(True)
+
+                result = getParameter(self.fileAddress)  # imageTransformation中的函数
+                global perspectiveTransformation
+                perspectiveTransformation = result[1]  # 全局变量，后面批量化预处理要用
+
+                self.labelPerspectiveTransformationImage.setPixmap(QtGui.QPixmap(result[0]))
+                self.labelPerspectiveTransformationImage.setScaledContents(True)
+                os.remove(result[0])  # 把临时创建的文件删除
+        except:
+            pass
 
 
 # 从图片读入答案

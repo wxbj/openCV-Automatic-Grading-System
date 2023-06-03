@@ -39,7 +39,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
 </string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditBasicParameterAddress">
+   <widget class="QLineEdit" name="lineEditPerspectiveTransformationAddress">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -49,7 +49,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonBasicParameterChoice">
+   <widget class="QPushButton" name="pushButtonpersPectiveTransformationChoice">
     <property name="geometry">
      <rect>
       <x>690</x>
@@ -65,7 +65,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
      <string>选择图片</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelBasicParameterImage">
+   <widget class="QLabel" name="labelPerspectiveTransformationImage">
     <property name="geometry">
      <rect>
       <x>420</x>
@@ -108,7 +108,7 @@ rgb(255, 255, 127)}</string>
      <string>处理结果：</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelOriginalBasicParameterImage">
+   <widget class="QLabel" name="labelOriginalperspectiveTransformationImage">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -139,6 +139,7 @@ rgb(255, 255, 127)}</string>
     </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBarPerspectiveTransformation"/>
  </widget>
  <resources/>
  <connections/>

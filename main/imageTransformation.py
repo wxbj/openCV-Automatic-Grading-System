@@ -2,7 +2,8 @@ import sys
 from utils.imageTransformationUtil import *
 
 
-def getBasicParameter(filePath):
+# 返回列表[透视变换后的图片地址, 透视变换的参数]
+def getParameter(filePath):
     ###################################
     pathImg = filePath
     widthImg = 720  # 图片宽度
@@ -18,12 +19,12 @@ def getBasicParameter(filePath):
 
     # 接受用户的调整数值，最终的数据放在thres和contours中
     while True:
-        thres = getValTrackbars()
-        imgCanny = cv.Canny(imgBlur, thres[0], thres[1])
+        parameter = getValTrackbars()
+        imgCanny = cv.Canny(imgBlur, parameter[0], parameter[1])
 
         kernel = np.ones((5, 5))
-        imgDial = cv.dilate(imgCanny, kernel, iterations=thres[2])
-        imgCanny = cv.erode(imgDial, kernel, iterations=thres[3])
+        imgDial = cv.dilate(imgCanny, kernel, iterations=parameter[2])
+        imgCanny = cv.erode(imgDial, kernel, iterations=parameter[3])
 
         contours = cv.findContours(imgCanny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[0]
 
@@ -49,8 +50,8 @@ def getBasicParameter(filePath):
 
     cv.imwrite(sys.path[0] + r"\temp.png", imgWarpColoreds)
 
-    return [sys.path[0] + r"\temp.png", thres, imgWarpColoreds]
+    return [sys.path[0] + r"\temp.png", parameter]
 
 
 if __name__ == "__main__":
-    getBasicParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg')
+    getParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg')
