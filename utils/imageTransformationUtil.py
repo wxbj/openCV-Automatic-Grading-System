@@ -10,8 +10,8 @@ def nothing(x):
 # 初始化界面
 def initializeInterface():
     cv.namedWindow("settings", cv.WINDOW_NORMAL)
-    cv.createTrackbar("minThresh", "settings", 106, 255, nothing)
-    cv.createTrackbar("maxThresh", "settings", 74, 255, nothing)
+    cv.createTrackbar("minThresh", "settings", 50, 255, nothing)
+    cv.createTrackbar("maxThresh", "settings", 100, 255, nothing)
     cv.createTrackbar("dilate", "settings", 2, 5, nothing)
     cv.createTrackbar("erode", "settings", 1, 5, nothing)
 
