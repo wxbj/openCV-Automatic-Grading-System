@@ -8,7 +8,6 @@ from ui.initialWindow import Ui_initialWindow
 from ui.inputAnswerWindow import Ui_inputAnswerWindow
 from ui.inputReplyWindow import Ui_inputReplyWindow
 from ui.gradingPaperWondow import Ui_gradingPaperWindow
-from ui.blurImageProcessingWindow import Ui_blurImageProcessingWindow
 from ui.menuWindow import Ui_menuWindow
 from ui.perspectiveTransformationWindow import Ui_perspectiveTransformationWindow
 from ui.preprocessingPapersWindow import Ui_preprocessingPapersWindow
@@ -221,13 +220,6 @@ class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
                 self.tableWidgetGrading.setItem(row, j, item)
 
 
-# 模糊图像处理
-class blurImageProcessingWindow(QMainWindow, Ui_blurImageProcessingWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-
-
 # 试卷设置
 class examPaperSettingWindow(QMainWindow, Ui_examPaperSettingWindow):
     def __init__(self):
@@ -256,7 +248,6 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.inputAnswerWindow = inputAnswerWindow()
         self.inputReplyWindow = inputReplyWindow()
         self.gradingPaperWindow = gradingPaperWindow()
-        self.blurImageProcessingWindow = blurImageProcessingWindow()
         self.perspectiveTransformationWindow = perspectiveTransformationWindow()
         self.preprocessingPapersWindow = preprocessingPapersWindow()
         self.displayPictureWindow = displayPictureWindow()
@@ -273,8 +264,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.actionInputReply.triggered.connect(self.inputReply)
         self.actionGradingPaper.triggered.connect(self.gradingPaper)
         self.actionOutputExcel.triggered.connect(self.outputExcel)
-        self.menuBlurImageProcessing.triggered.connect(self.blurImageProcessing)
-        self.actionBasicParameterSettings.triggered.connect(self.perspectiveTransformationWindow)
+        self.actionPerspectiveTransformation.triggered.connect(self.perspectiveTransformation)
         self.actionPreprocessingPapers.triggered.connect(self.preprocessingPapers)
         self.actionDisplayPicture.triggered.connect(self.displayPicture)
         self.actionExamPaperSetting.triggered.connect(self.examPaperSetting)
@@ -293,10 +283,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         writeGradExcel(gradings)
         self.statusBar.showMessage("保存成功！")
 
-    def blurImageProcessing(self):
-        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.blurImageProcessingWindow))
-
-    def perspectiveTransformationWindow(self):
+    def perspectiveTransformation(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.perspectiveTransformationWindow))
 
     def preprocessingPapers(self):

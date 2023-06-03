@@ -39,25 +39,12 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
 </string>
     </property>
    </widget>
-   <widget class="QLabel" name="label1">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>选择样例图片：</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEditBasicParameterAddress">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>30</x>
       <y>290</y>
-      <width>541</width>
+      <width>631</width>
       <height>21</height>
      </rect>
     </property>
@@ -65,9 +52,9 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
    <widget class="QPushButton" name="pushButtonBasicParameterChoice">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>690</x>
       <y>290</y>
-      <width>51</width>
+      <width>71</width>
       <height>20</height>
      </rect>
     </property>
@@ -75,7 +62,7 @@ font: 14pt &quot;Adobe Devanagari&quot;;</string>
      <string notr="true">background-color: rgb(177, 177, 177);</string>
     </property>
     <property name="text">
-     <string>...</string>
+     <string>选择图片</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelBasicParameterImage">

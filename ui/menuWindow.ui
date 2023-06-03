@@ -56,7 +56,7 @@
     <property name="title">
      <string>设置</string>
     </property>
-    <addaction name="actionBasicParameterSettings"/>
+    <addaction name="actionPerspectiveTransformation"/>
     <addaction name="actionPreprocessingPapers"/>
     <addaction name="actionExamPaperSetting"/>
    </widget>
@@ -234,7 +234,7 @@
     <string>6</string>
    </property>
   </action>
-  <action name="actionBasicParameterSettings">
+  <action name="actionPerspectiveTransformation">
    <property name="text">
     <string>透视变化</string>
    </property>
