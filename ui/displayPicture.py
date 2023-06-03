@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_displayPictureWindow(object):
     def setupUi(self, displayPictureWindow):
         displayPictureWindow.setObjectName("displayPictureWindow")
-        displayPictureWindow.resize(800, 600)
+        displayPictureWindow.resize(800, 628)
         self.centralwidget = QtWidgets.QWidget(displayPictureWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.textEditFileUrl = QtWidgets.QTextEdit(self.centralwidget)
@@ -34,6 +34,9 @@ class Ui_displayPictureWindow(object):
         self.pushButtonNext.setGeometry(QtCore.QRect(570, 550, 93, 28))
         self.pushButtonNext.setObjectName("pushButtonNext")
         displayPictureWindow.setCentralWidget(self.centralwidget)
+        self.statusBarDisplayPicture = QtWidgets.QStatusBar(displayPictureWindow)
+        self.statusBarDisplayPicture.setObjectName("statusBarDisplayPicture")
+        displayPictureWindow.setStatusBar(self.statusBarDisplayPicture)
 
         self.retranslateUi(displayPictureWindow)
         QtCore.QMetaObject.connectSlotsByName(displayPictureWindow)

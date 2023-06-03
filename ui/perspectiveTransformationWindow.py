@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'basicParameterSettingsWindow.ui'
+# Form implementation generated from reading ui file 'perspectiveTransformationWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,11 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_basicParameterSettingsWindow(object):
-    def setupUi(self, basicParameterSettingsWindow):
-        basicParameterSettingsWindow.setObjectName("basicParameterSettingsWindow")
-        basicParameterSettingsWindow.resize(802, 710)
-        self.centralwidget = QtWidgets.QWidget(basicParameterSettingsWindow)
+class Ui_perspectiveTransformationWindow(object):
+    def setupUi(self, perspectiveTransformationWindow):
+        perspectiveTransformationWindow.setObjectName("perspectiveTransformationWindow")
+        perspectiveTransformationWindow.resize(802, 710)
+        self.centralwidget = QtWidgets.QWidget(perspectiveTransformationWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label2 = QtWidgets.QLabel(self.centralwidget)
         self.label2.setGeometry(QtCore.QRect(10, 30, 701, 261))
@@ -54,15 +54,15 @@ class Ui_basicParameterSettingsWindow(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(10, 340, 72, 15))
         self.label_2.setObjectName("label_2")
-        basicParameterSettingsWindow.setCentralWidget(self.centralwidget)
+        perspectiveTransformationWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(basicParameterSettingsWindow)
-        QtCore.QMetaObject.connectSlotsByName(basicParameterSettingsWindow)
+        self.retranslateUi(perspectiveTransformationWindow)
+        QtCore.QMetaObject.connectSlotsByName(perspectiveTransformationWindow)
 
-    def retranslateUi(self, basicParameterSettingsWindow):
+    def retranslateUi(self, perspectiveTransformationWindow):
         _translate = QtCore.QCoreApplication.translate
-        basicParameterSettingsWindow.setWindowTitle(_translate("basicParameterSettingsWindow", "基本参数设置"))
-        self.label2.setText(_translate("basicParameterSettingsWindow", "1、由于照片的差异，需要手动调整一些参数，帮助系统更好的运行。\n"
+        perspectiveTransformationWindow.setWindowTitle(_translate("perspectiveTransformationWindow", "透视变换"))
+        self.label2.setText(_translate("perspectiveTransformationWindow", "1、由于照片的差异，需要手动调整一些参数，帮助系统更好的运行。\n"
 "2、强度梯度小于minThresh的必定不是边缘\n"
 "3、强度梯度大于maxThresh的必定是边缘\n"
 "4、dilate会连接不连续部分\n"
@@ -70,8 +70,8 @@ class Ui_basicParameterSettingsWindow(object):
 "6、请随机选择一批图片中的一张\n"
 "7、点击Esc退出settings界面\n"
 ""))
-        self.label1.setText(_translate("basicParameterSettingsWindow", "选择样例图片："))
-        self.pushButtonBasicParameterChoice.setText(_translate("basicParameterSettingsWindow", "..."))
-        self.pushButtonStartAdjust.setText(_translate("basicParameterSettingsWindow", "开始调整"))
-        self.label.setText(_translate("basicParameterSettingsWindow", "处理结果："))
-        self.label_2.setText(_translate("basicParameterSettingsWindow", "原图："))
+        self.label1.setText(_translate("perspectiveTransformationWindow", "选择样例图片："))
+        self.pushButtonBasicParameterChoice.setText(_translate("perspectiveTransformationWindow", "..."))
+        self.pushButtonStartAdjust.setText(_translate("perspectiveTransformationWindow", "开始调整"))
+        self.label.setText(_translate("perspectiveTransformationWindow", "处理结果："))
+        self.label_2.setText(_translate("perspectiveTransformationWindow", "原图："))

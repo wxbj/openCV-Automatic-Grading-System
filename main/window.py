@@ -10,7 +10,7 @@ from ui.inputReplyWindow import Ui_inputReplyWindow
 from ui.gradingPaperWondow import Ui_gradingPaperWindow
 from ui.blurImageProcessingWindow import Ui_blurImageProcessingWindow
 from ui.menuWindow import Ui_menuWindow
-from ui.basicParameterSettingsWindow import Ui_basicParameterSettingsWindow
+from ui.perspectiveTransformationWindow import Ui_perspectiveTransformationWindow
 from ui.preprocessingPapersWindow import Ui_preprocessingPapersWindow
 from ui.displayPicture import Ui_displayPictureWindow
 from ui.examPaperSettingWindow import Ui_examPaperSettingWindow
@@ -33,46 +33,50 @@ class displayPictureWindow(QMainWindow, Ui_displayPictureWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.choiceFolderUrl = ""
-        self.number = 0
+        self.choiceFolderUrl = ""  # 用户选择的文件夹
+        self.number = 0  # 当前显示的图片编号
 
         self.pushButtonChoiceFolder.clicked.connect(self.choiceFolder)
         self.pushButtonPrevious.clicked.connect(self.previous)
         self.pushButtonNext.clicked.connect(self.next)
 
     def choiceFolder(self):
-        self.choiceFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
-                                                                'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
+        try:
+            self.choiceFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
+                                                                    'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
 
-        solveAutomaticRotationOfImage(self.choiceFolderUrl)
-
-        self.textEditFileUrl.setText(self.choiceFolderUrl + "/" + os.listdir(self.choiceFolderUrl)[self.number])
-
-        self.labelPicture.setPixmap(
-            QtGui.QPixmap(self.choiceFolderUrl + "/" + os.listdir(self.choiceFolderUrl)[self.number]))
-        self.labelPicture.setScaledContents(True)
+            solveAutomaticRotationOfImage(self.choiceFolderUrl)
+            self.showQPixmap()
+        except:
+            self.statusBarDisplayPicture.showMessage("未选择图片文件夹")
 
     def previous(self):
-        if self.number == 0:
-            self.number = len(os.listdir(self.choiceFolderUrl)) - 1
-        else:
-            self.number -= 1
-        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
-
-        self.labelPicture.setPixmap(
-            QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
-        self.labelPicture.setScaledContents(True)
+        try:
+            if self.number == 0:
+                self.number = len(os.listdir(self.choiceFolderUrl)) - 1
+            else:
+                self.number -= 1
+            self.showQPixmap()
+        except:
+            self.statusBarDisplayPicture.showMessage("未选择图片文件夹")
 
     def next(self):
-        if self.number == (len(os.listdir(self.choiceFolderUrl)) - 1):
-            self.number = 0
-        else:
-            self.number += 1
-        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
+        try:
+            if self.number == (len(os.listdir(self.choiceFolderUrl)) - 1):
+                self.number = 0
+            else:
+                self.number += 1
+            self.showQPixmap()
+        except:
+            self.statusBarDisplayPicture.showMessage("未选择图片文件夹")
 
+    # 工具方法，用于显示文件路径和图片
+    def showQPixmap(self):
+        self.textEditFileUrl.setText(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number])
         self.labelPicture.setPixmap(
             QtGui.QPixmap(self.choiceFolderUrl + "\\" + os.listdir(self.choiceFolderUrl)[self.number]))
         self.labelPicture.setScaledContents(True)
+        self.statusBarDisplayPicture.showMessage("")
 
 
 # 初始界面，用于用户登录的显示内容
@@ -119,7 +123,7 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
 
 
 # 设定基本参数
-class basicParameterSettingsWindow(QMainWindow, Ui_basicParameterSettingsWindow):
+class perspectiveTransformationWindow(QMainWindow, Ui_perspectiveTransformationWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -253,7 +257,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.inputReplyWindow = inputReplyWindow()
         self.gradingPaperWindow = gradingPaperWindow()
         self.blurImageProcessingWindow = blurImageProcessingWindow()
-        self.basicParameterSettingsWindow = basicParameterSettingsWindow()
+        self.perspectiveTransformationWindow = perspectiveTransformationWindow()
         self.preprocessingPapersWindow = preprocessingPapersWindow()
         self.displayPictureWindow = displayPictureWindow()
         self.examPaperSettingWindow = examPaperSettingWindow()
@@ -270,7 +274,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.actionGradingPaper.triggered.connect(self.gradingPaper)
         self.actionOutputExcel.triggered.connect(self.outputExcel)
         self.menuBlurImageProcessing.triggered.connect(self.blurImageProcessing)
-        self.actionBasicParameterSettings.triggered.connect(self.basicParameterSettings)
+        self.actionBasicParameterSettings.triggered.connect(self.perspectiveTransformationWindow)
         self.actionPreprocessingPapers.triggered.connect(self.preprocessingPapers)
         self.actionDisplayPicture.triggered.connect(self.displayPicture)
         self.actionExamPaperSetting.triggered.connect(self.examPaperSetting)
@@ -292,8 +296,8 @@ class menuWindow(QMainWindow, Ui_menuWindow):
     def blurImageProcessing(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.blurImageProcessingWindow))
 
-    def basicParameterSettings(self):
-        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.basicParameterSettingsWindow))
+    def perspectiveTransformationWindow(self):
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.perspectiveTransformationWindow))
 
     def preprocessingPapers(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.preprocessingPapersWindow))

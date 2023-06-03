@@ -20,7 +20,7 @@
       <x>-2</x>
       <y>-1</y>
       <width>801</width>
-      <height>681</height>
+      <height>701</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -46,59 +46,11 @@
     <addaction name="actionGradingPaper"/>
     <addaction name="actionOutputExcel"/>
    </widget>
-   <widget class="QMenu" name="menuBlurImageProcessing">
-    <property name="title">
-     <string>模糊图像复原</string>
-    </property>
-    <addaction name="action1_11"/>
-    <addaction name="action1_12"/>
-    <addaction name="action1_13"/>
-    <addaction name="action1_14"/>
-    <addaction name="action1_15"/>
-   </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>工具</string>
     </property>
     <addaction name="actionDisplayPicture"/>
-    <addaction name="action2_2"/>
-    <addaction name="action3_2"/>
-    <addaction name="action4_2"/>
-    <addaction name="action5_2"/>
-    <addaction name="action6_2"/>
-   </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>输出</string>
-    </property>
-    <addaction name="action1_3"/>
-    <addaction name="action2_3"/>
-    <addaction name="action3_3"/>
-    <addaction name="action4_3"/>
-    <addaction name="action5_3"/>
-    <addaction name="action6_3"/>
-   </widget>
-   <widget class="QMenu" name="menu_4">
-    <property name="title">
-     <string>分析</string>
-    </property>
-    <addaction name="action1_4"/>
-    <addaction name="action2_4"/>
-    <addaction name="action3_4"/>
-    <addaction name="action4_4"/>
-    <addaction name="action5_4"/>
-    <addaction name="action6_4"/>
-   </widget>
-   <widget class="QMenu" name="menu_5">
-    <property name="title">
-     <string>阅卷</string>
-    </property>
-    <addaction name="action1_5"/>
-    <addaction name="action2_5"/>
-    <addaction name="action3_5"/>
-    <addaction name="action4_5"/>
-    <addaction name="action5_5"/>
-    <addaction name="action6_5"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -111,12 +63,7 @@
    <addaction name="menuSettings"/>
    <addaction name="menuAutomaticGradingSystem"/>
    <addaction name="menuTools"/>
-   <addaction name="menu_5"/>
-   <addaction name="menu_4"/>
-   <addaction name="menu_3"/>
-   <addaction name="menuBlurImageProcessing"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionInputAnswer">
    <property name="text">
     <string>读入答案</string>
@@ -169,7 +116,7 @@
   </action>
   <action name="actionDisplayPicture">
    <property name="text">
-    <string>显示图片</string>
+    <string>浏览图片</string>
    </property>
   </action>
   <action name="action2_2">
@@ -289,7 +236,7 @@
   </action>
   <action name="actionBasicParameterSettings">
    <property name="text">
-    <string>基本参数设置</string>
+    <string>透视变化</string>
    </property>
   </action>
   <action name="action1_7">
