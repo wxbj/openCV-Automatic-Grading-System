@@ -19,7 +19,6 @@ from main.imageTransformation import getParameter
 from main.optionDetection import getAnswer
 
 perspectiveTransformation = []  # 存放图片透视变换需要的参数
-preprocessedFolder = ''  # 预处理完成的试卷夹
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
@@ -91,34 +90,49 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.preprocessingPapersUrls = []
-        self.img = []
+        self.preprocessingPapersUrls = []  # 预处理图片的路径
+        self.img = []  # 处理后的图片
 
         self.pushButtonChoiceFolder.clicked.connect(self.getFileUrls)
         self.pushButtonStartHandle.clicked.connect(self.startHandle)
         self.pushButtonSaveResult.clicked.connect(self.saveResult)
 
     def getFileUrls(self):
-        preprocessingPapersFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
-                                                                        'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
-        self.textEditPreprocessingFolder.setText(preprocessingPapersFolderUrl)
+        try:
+            preprocessingPapersFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
+                                                                            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img')
+            self.textEditPreprocessingFolder.setText(preprocessingPapersFolderUrl)
 
-        preprocessingPapersStr = ""
-        for i in os.listdir(preprocessingPapersFolderUrl):
-            self.preprocessingPapersUrls.append(preprocessingPapersFolderUrl + "/" + i)
-            preprocessingPapersStr = preprocessingPapersStr + preprocessingPapersFolderUrl + "/" + i + "\n"
+            preprocessingPapersStr = ""
+            for i in os.listdir(preprocessingPapersFolderUrl):
+                self.preprocessingPapersUrls.append(preprocessingPapersFolderUrl + "/" + i)
+                preprocessingPapersStr = preprocessingPapersStr + preprocessingPapersFolderUrl + "/" + i + "\n"
 
-        self.textEditPreprocessingFileList.setText(preprocessingPapersStr)
+            self.textEditPreprocessingFileList.setText(preprocessingPapersStr)
+            self.statusBarPreprocessing.showMessage("文件读取成功")
+        except:
+            self.statusBarPreprocessing.showMessage("未选择文件夹路径")
 
     def startHandle(self):
-        self.img = preprocessingPapers(self.preprocessingPapersUrls, perspectiveTransformation)
-        self.statusBarPreprocessing.showMessage("处理完成")
+        try:
+            if not perspectiveTransformation:
+                self.statusBarPreprocessing.showMessage("请先进行透视变换来设置参数")
+            else:
+                self.img = preprocessingPapers(self.preprocessingPapersUrls, perspectiveTransformation)
+                self.statusBarPreprocessing.showMessage("处理完成")
+        except:
+            self.statusBarPreprocessing.showMessage("处理失败")
 
     def saveResult(self):
-        global preprocessedFolder
-        preprocessedFolder = saveResultFolder(QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
-                                              self.img)
-        self.statusBarPreprocessing.showMessage("保存完成")
+        try:
+            if not self.img:
+                self.statusBarPreprocessing.showMessage("请先开始处理")
+            else:
+                saveResultFolder(QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
+                                 self.img)
+                self.statusBarPreprocessing.showMessage("保存完成")
+        except:
+            self.statusBarPreprocessing.showMessage("保存失败，请重试")
 
 
 # 透视变换

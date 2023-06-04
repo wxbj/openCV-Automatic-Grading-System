@@ -4,7 +4,7 @@ import cv2 as cv
 import pandas
 import shutil
 from main.optionDetection import getAnswer
-from main.preprocessingImage import getPreprocessedImage
+from main.imageTransformation import getPreprocessedImage
 from PIL import Image, ImageOps
 import numpy as np
 
@@ -120,10 +120,10 @@ def writeGradExcel(gradings):
 
 
 # 预处理试卷
-def preprocessingPapers(fileUrls, basicSettings):
+def preprocessingPapers(fileUrls, perspectiveTransformation):
     images = []
     for i in fileUrls:
-        images.append(getPreprocessedImage(i, basicSettings))
+        images.append(getPreprocessedImage(i, perspectiveTransformation))
     return images
 
 
