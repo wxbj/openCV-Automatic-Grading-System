@@ -1,7 +1,8 @@
 from utils.optionDetectionUtil import *
 
 
-def getAnswer(filePath, paperOption):
+# 从答题卡中提取答案
+def getAnswer(imageSegmentation, filePath, paperOption):
     ####################################
     path = filePath  # 图片地址
     widthImg = 720  # 图片宽度
@@ -24,14 +25,15 @@ def getAnswer(filePath, paperOption):
     image = cv_imread(path)
     image = cv.resize(image, (widthImg, heightImg))
     imgGray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    imgBlur = cv.GaussianBlur(imgGray, (7, 7), 1)
-    imgCanny = cv.Canny(imgBlur, 10, 50)
+    imgBlur = cv.GaussianBlur(imgGray, (imageSegmentation[0], imageSegmentation[0]), 1)
+    imgCanny = cv.Canny(imgBlur, imageSegmentation[1], imageSegmentation[2])
 
-    kernel = np.ones((2, 2), np.uint8)
-    dilate = cv.dilate(imgCanny, kernel, iterations=1)
+    kernel = np.ones((imageSegmentation[3], imageSegmentation[3]), np.uint8)
+    dilate = cv.dilate(imgCanny, kernel, iterations=imageSegmentation[4])
+    erosion = cv.erode(dilate, kernel, iterations=imageSegmentation[5])
 
     # 所有矩形填涂区域轮廓
-    contours = cv.findContours(dilate, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
+    contours = cv.findContours(erosion, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
     contoursRect = getContoursRect(contours)
 
     # 提取矩形轮廓的四角
@@ -50,11 +52,11 @@ def getAnswer(filePath, paperOption):
     cv.drawContours(maskChoice, [contoursRect[0]], -1, (255, 255, 255), -1)
     imgGrayChoice = cv.bitwise_and(imgGray, imgGray, mask=maskChoice)
 
-    imgCannyChoice = cv.Canny(imgGrayChoice, 50, 200)
+    imgCannyChoice = cv.Canny(imgGrayChoice, imageSegmentation[6], imageSegmentation[7])
 
-    kernel = np.ones((2, 2), np.uint8)
-    dilate = cv.dilate(imgCannyChoice, kernel, iterations=2)
-    erosion = cv.erode(dilate, kernel, iterations=1)
+    kernel = np.ones((imageSegmentation[8], imageSegmentation[8]), np.uint8)
+    dilate = cv.dilate(imgCannyChoice, kernel, iterations=imageSegmentation[9])
+    erosion = cv.erode(dilate, kernel, iterations=imageSegmentation[10])
 
     contoursChoice = cv.findContours(erosion, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)[0]
     contoursChoiceRect = getContourChoice(contoursChoice)
@@ -145,7 +147,71 @@ def getAnswer(filePath, paperOption):
     return answerSheet
 
 
+# 弹窗，让用户提供参数
+def getInputAnswerParameter(filePath):
+    ####################################
+    path = filePath  # 图片地址
+    widthImg = 720  # 图片宽度
+    heightImg = 960  # 图片长度
+    ####################################
+
+    # 初始化
+    initializeInterface()
+    image = cv_imread(path)
+    image = cv.resize(image, (widthImg, heightImg))
+    imgGray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 接受用户的调整数值，最终的数据放在parameter和contours中
+    while True:
+        parameter = getValTrackbars()
+        imgBlur = cv.GaussianBlur(imgGray, (parameter[0], parameter[0]), 2)
+        imgCanny = cv.Canny(imgBlur, parameter[1], parameter[2])
+
+        kernel = np.ones((parameter[3], parameter[3]), np.uint8)
+        dilate = cv.dilate(imgCanny, kernel, iterations=parameter[4])
+        erosion = cv.erode(dilate, kernel, iterations=parameter[5])
+
+        # 所有矩形填涂区域轮廓
+        contours = cv.findContours(erosion, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
+        contoursPrint = []
+        for i in contours:
+            if cv.contourArea(i) >= 10000:
+                contoursPrint.append(i)
+
+        contoursRect = getContoursRect(contours)
+
+        img1 = image.copy()
+        cv.drawContours(img1, contoursPrint, -1, (0, 255, 0), 1)
+        # 单独处理选项区域
+        maskChoice = np.zeros(imgGray.shape, np.uint8)
+        cv.drawContours(maskChoice, [contoursRect[0]], -1, (255, 255, 255), -1)
+        imgGrayChoice = cv.bitwise_and(imgGray, imgGray, mask=maskChoice)
+
+        imgCannyChoice = cv.Canny(imgGrayChoice, parameter[6], parameter[7])
+
+        kernel = np.ones((parameter[8], parameter[8]), np.uint8)
+        dilate = cv.dilate(imgCannyChoice, kernel, iterations=parameter[9])
+        erosion = cv.erode(dilate, kernel, iterations=parameter[10])
+
+        contoursChoice = cv.findContours(erosion, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)[0]
+        contoursChoiceRect = []
+        for i in contoursChoice:
+            if cv.contourArea(i) >= 10000:
+                contoursChoiceRect.append(i)
+
+        img = img1.copy()
+        cv.drawContours(img, contoursChoiceRect, -1, (0, 255, 0), 1)
+        cv.imshow("image", img)
+
+        k = cv.waitKey(1) & 0xFF
+        if k == 27:
+            cv.destroyAllWindows()
+            break
+    return parameter
+
+
 if __name__ == "__main__":
-    paperOptions = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
-    answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img1.jpg", paperOptions)
-    print(answer)
+    # paperOptions = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
+    # answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img1.jpg", paperOptions)
+    # print(answer)
+    print(getInputAnswerParameter(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/firstTest/img1.jpg"))

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>imageSegmentationWindow</class>
+ <widget class="QMainWindow" name="imageSegmentationWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>809</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>图像分割</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>751</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 12pt &quot;Adobe Devanagari&quot;;
+font: 14pt &quot;Adobe Devanagari&quot;;</string>
+    </property>
+    <property name="text">
+     <string>1、由于照片的差异，需要手动调整一些参数，帮助系统更好的运行。
+2、gaussBlur会去除照片的噪声点
+3、强度梯度小于minThresh的必定不是边缘
+4、强度梯度大于maxThresh的必定是边缘
+5、kernel卷积核大小
+5、dilate会连接不连续部分
+6、强度梯度小于minChoice的必定不是边缘
+8、强度梯度大于maxChoice的必定是边缘
+9、kerChoice选项部分卷积核
+10、dilChoice会连接选项部分不连续部分
+11、eroChoice会丢弃部分边缘像素，可能会造成不连续
+12、请随机选择一批图片中的一张
+13、点击Esc退出settings界面
+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonImageSegmentation">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>500</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>点击开始</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditAddressSegment">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>440</y>
+      <width>591</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonChoiceSegment">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>440</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(177, 177, 177);</string>
+    </property>
+    <property name="text">
+     <string>选择图片</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>809</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbarImageSegmentation"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

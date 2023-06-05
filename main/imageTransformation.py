@@ -17,7 +17,7 @@ def getParameter(filePath):
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
 
-    # 接受用户的调整数值，最终的数据放在thres和contours中
+    # 接受用户的调整数值，最终的数据放在parameter和contours中
     while True:
         parameter = getValTrackbars()
         imgCanny = cv.Canny(imgBlur, parameter[0], parameter[1])

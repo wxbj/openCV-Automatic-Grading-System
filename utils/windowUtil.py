@@ -20,7 +20,8 @@ def solveAutomaticRotationOfImage(imageFolderPath):
     shutil.rmtree(imageFolderPath)
     os.mkdir(imageFolderPath)
     for img, imgName in zip(imgs, imgName):
-        cv.imwrite(imgName, img)
+        # cv.imwrite(imgName, img)
+        cv.imencode('.jpg', img)[1].tofile(imageFolderPath + f"\\{imgName}.jpg")
 
 
 # 返回评分列表

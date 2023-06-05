@@ -59,6 +59,7 @@
     <addaction name="actionPerspectiveTransformation"/>
     <addaction name="actionPreprocessingPapers"/>
     <addaction name="actionExamPaperSetting"/>
+    <addaction name="actionImageSegmentation"/>
    </widget>
    <addaction name="menuSettings"/>
    <addaction name="menuAutomaticGradingSystem"/>
@@ -292,6 +293,11 @@
   <action name="actionExamPaperSetting">
    <property name="text">
     <string>试卷设置</string>
+   </property>
+  </action>
+  <action name="actionImageSegmentation">
+   <property name="text">
+    <string>图像分割</string>
    </property>
   </action>
  </widget>

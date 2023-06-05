@@ -263,3 +263,43 @@ def detectMultipleChoice(darryBoxes, number, optionNumber, numberToLetter):
 # 解决opencv不支持中文路径问题
 def cv_imread(file_path):
     return cv.imdecode(np.fromfile(file_path, dtype=np.uint8), -1)
+
+
+# 跟踪栏值更改的回调函数
+def nothing(x):
+    pass
+
+
+# 初始化界面
+def initializeInterface():
+    cv.namedWindow("settings", cv.WINDOW_NORMAL)
+    cv.resizeWindow("settings", 500, 500)
+    cv.createTrackbar("gaussBlur", "settings", 3, 5, nothing)
+    cv.createTrackbar("minThresh", "settings", 10, 255, nothing)
+    cv.createTrackbar("maxThresh", "settings", 50, 255, nothing)
+    cv.createTrackbar("kernel", "settings", 2, 10, nothing)
+    cv.createTrackbar("dilate", "settings", 1, 5, nothing)
+    cv.createTrackbar("erosion", "settings", 0, 5, nothing)
+    cv.createTrackbar("minChoice", "settings", 50, 255, nothing)
+    cv.createTrackbar("maxChoice", "settings", 200, 255, nothing)
+    cv.createTrackbar("kerChoice", "settings", 2, 10, nothing)
+    cv.createTrackbar("dilChoice", "settings", 2, 5, nothing)
+    cv.createTrackbar("eroChoice", "settings", 1, 5, nothing)
+
+
+# 获取滑动条数值
+def getValTrackbars():
+    GaussianBlur = cv.getTrackbarPos("gaussBlur", "settings")
+    minCannyThresh = cv.getTrackbarPos("minThresh", "settings")
+    maxCannyThresh = cv.getTrackbarPos("maxThresh", "settings")
+    kernel = cv.getTrackbarPos("kernel", "settings")
+    dilate = cv.getTrackbarPos("dilate", "settings")
+    erosion = cv.getTrackbarPos("erosion", "settings")
+    minCannyChoice = cv.getTrackbarPos("minChoice", "settings")
+    maxCannyChoice = cv.getTrackbarPos("maxChoice", "settings")
+    kernelChoice = cv.getTrackbarPos("kerChoice", "settings")
+    dilateChoice = cv.getTrackbarPos("dilChoice", "settings")
+    erosionChoice = cv.getTrackbarPos("eroChoice", "settings")
+    return [GaussianBlur*2+1, minCannyThresh, maxCannyThresh, kernel, dilate, erosion, minCannyChoice, maxCannyChoice,
+            kernelChoice,
+            dilateChoice, erosionChoice]

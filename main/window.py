@@ -13,16 +13,51 @@ from ui.perspectiveTransformationWindow import Ui_perspectiveTransformationWindo
 from ui.preprocessingPapersWindow import Ui_preprocessingPapersWindow
 from ui.displayPicture import Ui_displayPictureWindow
 from ui.examPaperSettingWindow import Ui_examPaperSettingWindow
+from ui.imageSegmentationWindow import Ui_imageSegmentationWindow
 
 from utils.windowUtil import *
 from main.imageTransformation import getParameter
-from main.optionDetection import getAnswer
+from main.optionDetection import getAnswer, getInputAnswerParameter
 
 perspectiveTransformation = []  # 存放图片透视变换需要的参数
+imageSegmentation = []  # 存放图像分割所需要的参数
 paperOption = {}  # 设卷格式
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
+
+
+# 图像分割
+class imageSegmentationWindow(QMainWindow, Ui_imageSegmentationWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.fileAddress = ""  # 存放用户选择的文件地址
+
+        self.pushButtonImageSegmentation.clicked.connect(self.imageSegmentation)
+        self.pushButtonChoiceSegment.clicked.connect(self.choiceImageSegment)
+
+    def imageSegmentation(self):
+        global imageSegmentation
+        try:
+            if not perspectiveTransformation:
+                self.statusbarImageSegmentation.showMessage("请传入预处理后的图片")
+            else:
+                imageSegmentation = getInputAnswerParameter(self.fileAddress)
+                self.statusbarImageSegmentation.showMessage("参数设置成功")
+        except:
+            self.statusbarImageSegmentation.showMessage("参数设置失败")
+
+    def choiceImageSegment(self):
+        try:
+            self.fileAddress = QFileDialog.getOpenFileName(self, '选择文件',
+                                                           'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
+                                                           "Image files (*.jpg *.gif *.png)")[0]
+            self.lineEditAddressSegment.setText(self.fileAddress)
+            self.statusbarImageSegmentation.showMessage("图片选择成功")
+        except:
+            self.statusbarImageSegmentation.showMessage("未成功选择图片")
 
 
 # 图片浏览
@@ -199,12 +234,13 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
             global perspectiveTransformation
             global paperOption
             global answer
+            global imageSegmentation
             if not perspectiveTransformation:
                 self.statusBarInputAnswer.showMessage("请先将图片预处理")
             elif not paperOption:
                 self.statusBarInputAnswer.showMessage("请先设置试卷格式")
             else:
-                answer = getAnswer(self.fileAddress, paperOption)
+                answer = getAnswer(imageSegmentation, self.fileAddress, paperOption)
                 answerStr = ""
                 keys = ["考试科目栏:", "单选题:", "多选题:"]
                 for key, value in answer.items():
@@ -296,6 +332,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.preprocessingPapersWindow = preprocessingPapersWindow()
         self.displayPictureWindow = displayPictureWindow()
         self.examPaperSettingWindow = examPaperSettingWindow()
+        self.imageSegmentationWindow = imageSegmentationWindow()
 
         number = self.stackedWidget.addWidget(self.initialWindow)
         self.stackedWidget.setCurrentIndex(number)
@@ -312,6 +349,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.actionPreprocessingPapers.triggered.connect(self.preprocessingPapers)
         self.actionDisplayPicture.triggered.connect(self.displayPicture)
         self.actionExamPaperSetting.triggered.connect(self.examPaperSetting)
+        self.actionImageSegmentation.triggered.connect(self.imageSegmentation)
 
     def inputAnswer(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.inputAnswerWindow))
@@ -338,6 +376,9 @@ class menuWindow(QMainWindow, Ui_menuWindow):
 
     def examPaperSetting(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.examPaperSettingWindow))
+
+    def imageSegmentation(self):
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.imageSegmentationWindow))
 
 
 if __name__ == "__main__":
