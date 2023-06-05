@@ -7,32 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>614</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>答案读入</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="labelAnswerAddress">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>选择答案地址：</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonChoice">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>650</x>
       <y>30</y>
-      <width>51</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -40,15 +27,15 @@
      <string notr="true">background-color: rgb(177, 177, 177);</string>
     </property>
     <property name="text">
-     <string>...</string>
+     <string>选择答案图片</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEditAddress">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>40</x>
       <y>30</y>
-      <width>551</width>
+      <width>591</width>
       <height>21</height>
      </rect>
     </property>
@@ -57,13 +44,27 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>80</y>
+      <y>110</y>
       <width>721</width>
-      <height>481</height>
+      <height>451</height>
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButtonInputAnswer">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>70</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>提取答案</string>
+    </property>
+   </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBarInputAnswer"/>
  </widget>
  <resources/>
  <connections/>

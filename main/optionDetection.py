@@ -21,7 +21,7 @@ def getAnswer(filePath, paperOption):
     ####################################
 
     # 预处理
-    image = cv.imread(path)
+    image = cv_imread(path)
     image = cv.resize(image, (widthImg, heightImg))
     imgGray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
@@ -144,5 +144,5 @@ def getAnswer(filePath, paperOption):
 
 if __name__ == "__main__":
     paperOptions = {'单选题开始': 1, '单选题终止': 30, '单选题分值': 1, '多选题开始': 100, '多选题终止': 105, '多选题分值': 2}
-    answer = getAnswer(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\prepore\img0.jpg", paperOptions)
+    answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img15.jpg", paperOptions)
     print(answer)

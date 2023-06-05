@@ -258,3 +258,8 @@ def detectMultipleChoice(darryBoxes, number, optionNumber, numberToLetter):
             strChoice += numberToLetter[i]
         choiceLetter.append(strChoice)
     return choiceLetter
+
+
+# 解决opencv不支持中文路径问题
+def cv_imread(file_path):
+    return cv.imdecode(np.fromfile(file_path, dtype=np.uint8), -1)

@@ -128,12 +128,14 @@ def preprocessingPapers(fileUrls, perspectiveTransformation):
 
 
 # 保存预处理后的试卷
-def saveResultFolder(folderName, images):
+def saveResultFolder(preFolderUrl, folderName, images):
     folder = sys.path[0][:-5] + "\img\\" + folderName
+    imgNames = []
+    for i in os.listdir(preFolderUrl):
+        imgNames.append(i[0:-4])
     os.mkdir(folder)
-    for i, image in zip(range(len(images)), images):
-        cv.imencode('.jpg', image)[1].tofile(folder + f"\img{i+1}.jpg")
-    return folder
+    for ingName, image in zip(imgNames, images):
+        cv.imencode('.jpg', image)[1].tofile(folder + f"\\{ingName}.jpg")
 
 
 if __name__ == "__main__":

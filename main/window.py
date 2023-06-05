@@ -19,10 +19,10 @@ from main.imageTransformation import getParameter
 from main.optionDetection import getAnswer
 
 perspectiveTransformation = []  # 存放图片透视变换需要的参数
+paperOption = {}  # 设卷格式
 answer = {}  # 存放答案列表
 replyUrls = []  # 存放学生列表
 gradings = []  # 存放学生成绩
-paperOption = {}  # 设卷格式
 
 
 # 图片浏览
@@ -92,6 +92,7 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
 
         self.preprocessingPapersUrls = []  # 预处理图片的路径
         self.img = []  # 处理后的图片
+        self.preprocessingPapersFolderUrl = ''  # 存放用户选择的文件夹名
 
         self.pushButtonChoiceFolder.clicked.connect(self.getFileUrls)
         self.pushButtonStartHandle.clicked.connect(self.startHandle)
@@ -99,14 +100,14 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
 
     def getFileUrls(self):
         try:
-            preprocessingPapersFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
-                                                                            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img')
-            self.textEditPreprocessingFolder.setText(preprocessingPapersFolderUrl)
+            self.preprocessingPapersFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
+                                                                                 'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img')
+            self.textEditPreprocessingFolder.setText(self.preprocessingPapersFolderUrl)
 
             preprocessingPapersStr = ""
-            for i in os.listdir(preprocessingPapersFolderUrl):
-                self.preprocessingPapersUrls.append(preprocessingPapersFolderUrl + "/" + i)
-                preprocessingPapersStr = preprocessingPapersStr + preprocessingPapersFolderUrl + "/" + i + "\n"
+            for i in os.listdir(self.preprocessingPapersFolderUrl):
+                self.preprocessingPapersUrls.append(self.preprocessingPapersFolderUrl + "/" + i)
+                preprocessingPapersStr = preprocessingPapersStr + self.preprocessingPapersFolderUrl + "/" + i + "\n"
 
             self.textEditPreprocessingFileList.setText(preprocessingPapersStr)
             self.statusBarPreprocessing.showMessage("文件读取成功")
@@ -128,7 +129,8 @@ class preprocessingPapersWindow(QMainWindow, Ui_preprocessingPapersWindow):
             if not self.img:
                 self.statusBarPreprocessing.showMessage("请先开始处理")
             else:
-                saveResultFolder(QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
+                saveResultFolder(self.preprocessingPapersFolderUrl,
+                                 QInputDialog.getText(self, "输入框", "试卷放置的文件夹名:", QLineEdit.Normal, "")[0],
                                  self.img)
                 self.statusBarPreprocessing.showMessage("保存完成")
         except:
@@ -178,27 +180,44 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.fileAddress = ''  # 存放用户选择的图片地址
         self.pushButtonChoice.clicked.connect(self.choiceAddress)
+        self.pushButtonInputAnswer.clicked.connect(self.startExtractAnswers)
 
     def choiceAddress(self):
-        fileAddress = QFileDialog.getOpenFileName(self, '选择文件',
-                                                  'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
-                                                  "Image files (*.jpg *.gif *.png)")[0]
-        self.lineEditAddress.setText(fileAddress)
+        try:
+            self.fileAddress = QFileDialog.getOpenFileName(self, '选择文件',
+                                                           'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
+                                                           "Image files (*.jpg *.gif *.png)")[0]
+            self.lineEditAddress.setText(self.fileAddress)
+            self.statusBarInputAnswer.showMessage("图片读取成功")
+        except:
+            self.statusBarInputAnswer.showMessage("未成功读取图片")
 
-        global answer
-        global paperOption
-        answer = getAnswer(fileAddress, paperOption)
-        answerStr = ""
-        keys = ["考试科目栏:", "单选题:", "多选题:"]
-        for key, value in answer.items():
-            if key in keys:
-                answerStr += key
-                for i in value:
-                    answerStr += str(i)
-                    answerStr += ' '
-                answerStr += "\n"
-        self.textEditAnswer.setText(answerStr)
+    def startExtractAnswers(self):
+        try:
+            global perspectiveTransformation
+            global paperOption
+            global answer
+            if not perspectiveTransformation:
+                self.statusBarInputAnswer.showMessage("请先将图片预处理")
+            elif not paperOption:
+                self.statusBarInputAnswer.showMessage("请先设置试卷格式")
+            else:
+                answer = getAnswer(self.fileAddress, paperOption)
+                answerStr = ""
+                keys = ["考试科目栏:", "单选题:", "多选题:"]
+                for key, value in answer.items():
+                    if key in keys:
+                        answerStr += key
+                        for i in value:
+                            answerStr += str(i)
+                            answerStr += ' '
+                        answerStr += "\n"
+                self.textEditAnswer.setText(answerStr)
+                self.statusBarInputAnswer.showMessage("成功提取答案")
+        except:
+            self.statusBarInputAnswer.showMessage("未提取到答案")
 
 
 # 从文件夹读入试卷
