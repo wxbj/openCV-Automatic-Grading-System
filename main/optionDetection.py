@@ -211,7 +211,9 @@ def getInputAnswerParameter(filePath):
 
 
 if __name__ == "__main__":
-    # paperOptions = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
-    # answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img1.jpg", paperOptions)
-    # print(answer)
-    print(getInputAnswerParameter(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/firstTest/img1.jpg"))
+    paperOptions = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
+    parament = [5, 10, 50, 2, 1, 0, 50, 200, 2, 2, 1]
+    answer = getAnswer(parament, r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/answer.jpg",
+                       paperOptions)
+    print(answer)
+    # print(getInputAnswerParameter(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img1.jpg"))

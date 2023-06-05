@@ -274,7 +274,7 @@ def nothing(x):
 def initializeInterface():
     cv.namedWindow("settings", cv.WINDOW_NORMAL)
     cv.resizeWindow("settings", 500, 500)
-    cv.createTrackbar("gaussBlur", "settings", 3, 5, nothing)
+    cv.createTrackbar("gaussBlur", "settings", 2, 5, nothing)
     cv.createTrackbar("minThresh", "settings", 10, 255, nothing)
     cv.createTrackbar("maxThresh", "settings", 50, 255, nothing)
     cv.createTrackbar("kernel", "settings", 2, 10, nothing)

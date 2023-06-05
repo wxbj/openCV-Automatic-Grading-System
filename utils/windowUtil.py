@@ -12,16 +12,15 @@ import numpy as np
 # 解决图像自动翻转的问题
 def solveAutomaticRotationOfImage(imageFolderPath):
     imgs = []
-    imgName = []
+    imgNames = []
     for i in range(len(os.listdir(imageFolderPath))):
         img = Image.open(imageFolderPath + "\\" + os.listdir(imageFolderPath)[i]).convert('RGB')
         imgs.append(np.array(ImageOps.exif_transpose(img))[:, :, ::-1])
-        imgName.append(imageFolderPath + "\\" + os.listdir(imageFolderPath)[i])
+        imgNames.append(imageFolderPath + "\\" + os.listdir(imageFolderPath)[i])
     shutil.rmtree(imageFolderPath)
     os.mkdir(imageFolderPath)
-    for img, imgName in zip(imgs, imgName):
-        # cv.imwrite(imgName, img)
-        cv.imencode('.jpg', img)[1].tofile(imageFolderPath + f"\\{imgName}.jpg")
+    for img, imgName in zip(imgs, imgNames):
+        cv.imencode('.jpg', img)[1].tofile(imgName)
 
 
 # 返回评分列表
@@ -135,11 +134,12 @@ def saveResultFolder(preFolderUrl, folderName, images):
     for i in os.listdir(preFolderUrl):
         imgNames.append(i[0:-4])
     os.mkdir(folder)
-    for ingName, image in zip(imgNames, images):
-        cv.imencode('.jpg', image)[1].tofile(folder + f"\\{ingName}.jpg")
+    for imgName, image in zip(imgNames, images):
+        cv.imencode('.jpg', image)[1].tofile(folder + f"\\{imgName}.jpg")
 
 
 if __name__ == "__main__":
+    pass
     # urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
@@ -158,4 +158,5 @@ if __name__ == "__main__":
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img9.jpg']
     # # preprocessingPapers(urls, [106, 74, 2, 1])
     # saveResultFolder("x", '')
-    solveAutomaticRotationOfImage(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\testNormal")
+    # solveAutomaticRotationOfImage(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\testNormal")
+    # solveAutomaticRotationOfImage("D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\sucfjlsdk")
