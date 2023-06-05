@@ -78,7 +78,7 @@ def getPreprocessedImage(filePath, perspectiveTransformation):
     biggest = reorderFourPoints(biggest)
 
     pt1 = np.float32(biggest)
-    pt2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])
+    pt2 = np.float32([[0, 0], [widthImg+5, 0], [0, heightImg+5], [widthImg+5, heightImg+5]])
     matrix = cv.getPerspectiveTransform(pt1, pt2)
     imgWarpColoreds = cv.warpPerspective(img, matrix, (widthImg, heightImg))
 
@@ -86,5 +86,6 @@ def getPreprocessedImage(filePath, perspectiveTransformation):
 
 
 if __name__ == "__main__":
-    getParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg')
-    getPreprocessedImage(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\img1.jpg')
+    pass
+    # getParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\answer.jpg')
+    # getPreprocessedImage(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\answer.jpg')

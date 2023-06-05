@@ -139,13 +139,13 @@ def saveResultFolder(preFolderUrl, folderName, images):
 
 
 if __name__ == "__main__":
-    # urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img1.jpg',
+    # urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img12.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img15.jpg',
+    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img2.jpg',
     #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img3.jpg',

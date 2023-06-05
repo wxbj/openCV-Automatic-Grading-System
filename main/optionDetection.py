@@ -24,11 +24,14 @@ def getAnswer(filePath, paperOption):
     image = cv_imread(path)
     image = cv.resize(image, (widthImg, heightImg))
     imgGray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    imgBlur = cv.GaussianBlur(imgGray, (5, 5), 1)
+    imgBlur = cv.GaussianBlur(imgGray, (7, 7), 1)
     imgCanny = cv.Canny(imgBlur, 10, 50)
 
+    kernel = np.ones((2, 2), np.uint8)
+    dilate = cv.dilate(imgCanny, kernel, iterations=1)
+
     # 所有矩形填涂区域轮廓
-    contours = cv.findContours(imgCanny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
+    contours = cv.findContours(dilate, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
     contoursRect = getContoursRect(contours)
 
     # 提取矩形轮廓的四角
@@ -143,6 +146,6 @@ def getAnswer(filePath, paperOption):
 
 
 if __name__ == "__main__":
-    paperOptions = {'单选题开始': 1, '单选题终止': 30, '单选题分值': 1, '多选题开始': 100, '多选题终止': 105, '多选题分值': 2}
-    answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img15.jpg", paperOptions)
+    paperOptions = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
+    answer = getAnswer(r"D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第一次模拟考/img1.jpg", paperOptions)
     print(answer)
