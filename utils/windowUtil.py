@@ -24,7 +24,7 @@ def solveAutomaticRotationOfImage(imageFolderPath):
 
 
 # 返回评分列表
-def getGradingLists(answer, replyUrls, paperOption):
+def getGradingLists(answer, replyUrls, paperOption, imageSegmentation):
     subject = answer['考试科目栏:']
     singleChoiceAnswer = answer['单选题:']
     multChoiceAnswer = answer['多选题:']
@@ -32,20 +32,30 @@ def getGradingLists(answer, replyUrls, paperOption):
     replys = []
     for replyUrl in replyUrls:
         try:
-            replys.append(getAnswer(replyUrl, paperOption))
+            replys.append(getAnswer(imageSegmentation, replyUrl, paperOption))
             continue
         except Exception:
             continue
+
+    accuracy = {}
+    for i in range(paperOption["单选题终止"] - paperOption["单选题开始"] + 1):
+        accuracy[f"单选题第{i + 1}题"] = 0
+    for i in range(paperOption["多选题终止"] - paperOption["多选题开始"] + 1):
+        accuracy[f"多选题第{i + 1}题"] = 0
+    accuracy["总学生数"] = 0
 
     gradings = []
     for reply in replys:
         student = []
         if (reply['考试科目栏:'] == subject) and (reply['缺考栏:'] == ['否']):
+            accuracy["总学生数"] += 1
             student.append(''.join('%s' % id for id in reply["准考证号栏:"]))
             student.append(''.join('%s' % id for id in reply["姓名栏:"]))
-            singleChoiceGrad = getSingleChoiceGrad(singleChoiceAnswer, reply["单选题:"], paperOption['单选题分值'])
+            accuracy, singleChoiceGrad = getSingleChoiceGrad(accuracy, singleChoiceAnswer, reply["单选题:"],
+                                                             paperOption['单选题分值'])
             student.append(singleChoiceGrad)
-            multipleChoiceGrad = getMultipleChoiceGrad(multChoiceAnswer, reply["多选题:"], paperOption['多选题分值'])
+            accuracy, multipleChoiceGrad = getMultipleChoiceGrad(accuracy, multChoiceAnswer, reply["多选题:"],
+                                                                 paperOption['多选题分值'])
             student.append(multipleChoiceGrad)
             subjectiveGrad = int(''.join('%s' % id for id in reply["主观题栏:"]))
             student.append(subjectiveGrad)
@@ -80,29 +90,32 @@ def getGradingLists(answer, replyUrls, paperOption):
             student.append(0)
             student.append("缺考")
             gradings.append(student)
-    return gradings
+
+    return accuracy, gradings
 
 
 # 单选题判分
-def getSingleChoiceGrad(Answer, reply, score):
+def getSingleChoiceGrad(accuracy, Answer, reply, score):
     grade = 0
-    for i, j in zip(Answer, reply):
+    for i, j, k in zip(Answer, reply, range(len(Answer))):
         if i == j:
+            accuracy[f"单选题第{k + 1}题"] += 1
             grade += score
-    return grade
+    return accuracy, grade
 
 
 # 多选题判分
-def getMultipleChoiceGrad(Answer, reply, score):
+def getMultipleChoiceGrad(accuracy, Answer, reply, score):
     grade = 0
-    for i, j in zip(Answer, reply):
+    for i, j, k in zip(Answer, reply, range(len(Answer))):
         if i == j:
+            accuracy[f"多选题第{k + 1}题"] += 1
             grade += score
-    return grade
+    return accuracy, grade
 
 
 # 打印成绩
-def writeGradExcel(gradings):
+def writeGradExcel(gradings, fileUrl):
     titles = ["学号", "姓名代码", "单选成绩", "多选成绩", "主观题成绩", "总成绩", "备注"]
     data = {}
     for title in titles:
@@ -116,7 +129,7 @@ def writeGradExcel(gradings):
         data[titles[5]].append(grading[5])
         data[titles[6]].append(grading[6])
     a = pandas.DataFrame(data)
-    a.to_excel('grad.xlsx', sheet_name='成绩单', index=False)
+    a.to_excel(fileUrl, sheet_name='成绩单', index=False)
 
 
 # 预处理试卷
@@ -139,24 +152,16 @@ def saveResultFolder(preFolderUrl, folderName, images):
 
 
 if __name__ == "__main__":
-    pass
-    # urls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img10.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img11.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img12.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/answer.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img2.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img3.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img4.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img5.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img6.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img7.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img8.jpg',
-    #         'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/camera/img9.jpg']
-    # # preprocessingPapers(urls, [106, 74, 2, 1])
-    # saveResultFolder("x", '')
-    # solveAutomaticRotationOfImage(r"D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\testNormal")
-    # solveAutomaticRotationOfImage("D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\sucfjlsdk")
+    answer = {'姓名栏:': [9], '准考证号栏:': [9, 9, 9, 9, 9, 9], '缺考栏:': ['否'], '主观题栏:': [9], '考试科目栏:': [0, 1],
+              '单选题:': ['A', 'B', 'C', 'C', 'D', 'B', 'C', 'C', 'D', 'A', 'B', 'C', 'D', 'B', 'C', 'A', 'B', 'B', 'A',
+                       'D', 'D', 'B', 'B', 'C', 'D', 'B', 'C', 'C', 'B', 'D', 'A', 'C', 'B', 'D', 'A', 'A', 'B', 'B',
+                       'D', 'D', 'A', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'A', 'A', 'D', 'C', 'A', 'C', 'B', 'A', 'B',
+                       'A', 'B', 'D'],
+              '多选题:': ['AB', 'BC', 'BC', 'CD', 'ABC', 'BC', 'BD', 'BD', 'AC', 'AD', 'AC', 'BC', 'CD', 'BD', 'ABD', 'BC',
+                       'BD', 'AC', 'BC', 'ACD', 'AC', 'BC', 'ACD', 'ABCD', 'BCD', 'BC', 'CD', 'AC', 'AB', 'BD', 'AB',
+                       'BC', 'CD', 'AD', 'ABC', 'AB', 'BC', 'BD', 'AC', 'BC', 'AD', 'BD', 'BC', 'AC', 'BCD']}
+    replyUrls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img2.jpg',
+                 'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img1.jpg']
+    paperOption = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
+    imageSegmentation = [5, 10, 50, 2, 1, 0, 50, 200, 2, 2, 1]
+    getGradingLists(answer, replyUrls, paperOption, imageSegmentation)

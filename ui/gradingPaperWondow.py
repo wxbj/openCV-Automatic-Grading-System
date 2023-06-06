@@ -18,7 +18,7 @@ class Ui_gradingPaperWindow(object):
         self.centralwidget = QtWidgets.QWidget(gradingPaperWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidgetGrading = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidgetGrading.setGeometry(QtCore.QRect(10, 70, 761, 551))
+        self.tableWidgetGrading.setGeometry(QtCore.QRect(10, 70, 761, 521))
         self.tableWidgetGrading.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tableWidgetGrading.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidgetGrading.setAlternatingRowColors(True)
@@ -84,13 +84,16 @@ class Ui_gradingPaperWindow(object):
         self.pushButtonGrading.setGeometry(QtCore.QRect(650, 20, 93, 28))
         self.pushButtonGrading.setObjectName("pushButtonGrading")
         gradingPaperWindow.setCentralWidget(self.centralwidget)
+        self.statusBarGradingPaper = QtWidgets.QStatusBar(gradingPaperWindow)
+        self.statusBarGradingPaper.setObjectName("statusBarGradingPaper")
+        gradingPaperWindow.setStatusBar(self.statusBarGradingPaper)
 
         self.retranslateUi(gradingPaperWindow)
         QtCore.QMetaObject.connectSlotsByName(gradingPaperWindow)
 
     def retranslateUi(self, gradingPaperWindow):
         _translate = QtCore.QCoreApplication.translate
-        gradingPaperWindow.setWindowTitle(_translate("gradingPaperWindow", "显示分数"))
+        gradingPaperWindow.setWindowTitle(_translate("gradingPaperWindow", "批阅试卷"))
         self.tableWidgetGrading.setSortingEnabled(False)
         item = self.tableWidgetGrading.horizontalHeaderItem(0)
         item.setText(_translate("gradingPaperWindow", "学号"))

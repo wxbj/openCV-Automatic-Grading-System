@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButtonReply">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>40</y>
+      <x>640</x>
+      <y>30</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -30,14 +30,15 @@
    <widget class="QTextEdit" name="textEditReply">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>100</y>
+      <x>20</x>
+      <y>70</y>
       <width>751</width>
-      <height>471</height>
+      <height>481</height>
      </rect>
     </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBarInputReply"/>
  </widget>
  <resources/>
  <connections/>

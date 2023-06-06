@@ -14,6 +14,7 @@ from ui.preprocessingPapersWindow import Ui_preprocessingPapersWindow
 from ui.displayPicture import Ui_displayPictureWindow
 from ui.examPaperSettingWindow import Ui_examPaperSettingWindow
 from ui.imageSegmentationWindow import Ui_imageSegmentationWindow
+from ui.scoringAnalysisWindow import Ui_scoringAnalysisWindow
 
 from utils.windowUtil import *
 from main.imageTransformation import getParameter
@@ -22,9 +23,11 @@ from main.optionDetection import getAnswer, getInputAnswerParameter
 perspectiveTransformation = []  # 存放图片透视变换需要的参数
 imageSegmentation = []  # 存放图像分割所需要的参数
 paperOption = {}  # 设卷格式
-answer = {}  # 存放答案列表
-replyUrls = []  # 存放学生列表
+answer = {}  # 存放答案列表,例如：{'姓名栏:': [...], '准考证号栏:': [...], '缺考栏:': [...], '主观题栏:': [...],
+# '考试科目栏:': [...], '单选题:': [...],'多选题:': [...]}
+replyUrls = []  # 存放学生列表 例如：['D:/img/第二次月考/answer.jpg', ]
 gradings = []  # 存放学生成绩
+accuracy = {}  # 正确率
 
 
 # 图像分割
@@ -117,6 +120,35 @@ class initialWindow(QMainWindow, Ui_initialWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+# 成绩分析
+class scoringAnalysisWindow(QMainWindow, Ui_scoringAnalysisWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.pushButtonStart.clicked.connect(self.start)
+
+    def start(self):
+        try:
+            global accuracy
+            global paperOption
+            accuracyList = []
+            for i in range(paperOption["单选题终止"] - paperOption["单选题开始"] + 1):
+                accuracyList.append(f"单选题第{i + 1}题" + str(accuracy[f"单选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%")
+            for i in range(paperOption["多选题终止"] - paperOption["多选题开始"] + 1):
+                accuracyList.append(f"多选题第{i + 1}题" + str(accuracy[f"多选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%")
+            accuracyStr = ""
+            number = 0
+            for i in accuracyList:
+                if number % 5 == 0:
+                    accuracyStr += "\n"
+                number += 1
+                accuracyStr += i
+            self.textEdit.setText(accuracyStr)
+        except:
+            pass
 
 
 # 预处理试卷界面
@@ -246,7 +278,11 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
                 for key, value in answer.items():
                     if key in keys:
                         answerStr += key
+                        number = 0
                         for i in value:
+                            if number % 5 == 0:
+                                answerStr += "\n"
+                            number += 1
                             answerStr += str(i)
                             answerStr += ' '
                         answerStr += "\n"
@@ -264,21 +300,25 @@ class inputReplyWindow(QMainWindow, Ui_inputReplyWindow):
         self.pushButtonReply.clicked.connect(self.getFileUrls)
 
     def getFileUrls(self):
-        replyFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
-                                                          'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
-        replyNames = os.listdir(replyFolderUrl)
+        try:
+            replyFolderUrl = QFileDialog.getExistingDirectory(self, '选择文件夹',
+                                                              'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img')
+            replyNames = os.listdir(replyFolderUrl)
 
-        global replyUrls
-        for i in replyNames:
-            replyUrls.append(replyFolderUrl + "/" + i)
+            global replyUrls
+            for i in replyNames:
+                replyUrls.append(replyFolderUrl + "/" + i)
 
-        replyStr = ""
-        for i in replyNames:
-            replyStr = replyStr + replyFolderUrl + "/" + i + "\n"
-        self.textEditReply.setText(replyStr)
+            replyStr = ""
+            for i in replyNames:
+                replyStr = replyStr + replyFolderUrl + "/" + i + "\n"
+            self.textEditReply.setText(replyStr)
+            self.statusBarInputReply.showMessage("试卷读入成功")
+        except:
+            self.statusBarInputReply.showMessage("试卷读入失败")
 
 
-# 评分
+# 批阅试卷
 class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
     def __init__(self):
         super().__init__()
@@ -287,17 +327,25 @@ class gradingPaperWindow(QMainWindow, Ui_gradingPaperWindow, QTableView):
 
     def getGrading(self):
         global answer
+        global imageSegmentation
         global replyUrls
+        global paperOption
         global gradings
-        gradings = getGradingLists(answer, replyUrls, paperOption)
-        print(gradings)
-        for grading in gradings:
-            row = self.tableWidgetGrading.rowCount()
-            self.tableWidgetGrading.insertRow(row)
-            for j in range(len(grading)):
-                item = QTableWidgetItem(str(grading[j]))
-                item.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-                self.tableWidgetGrading.setItem(row, j, item)
+        global accuracy
+        try:
+            if not paperOption:
+                self.statusBarGradingPaper.showMessage("请先进行试卷设置、预处理等操作")
+            else:
+                accuracy, gradings = getGradingLists(answer, replyUrls, paperOption, imageSegmentation)
+                for grading in gradings:
+                    row = self.tableWidgetGrading.rowCount()
+                    self.tableWidgetGrading.insertRow(row)
+                    for j in range(len(grading)):
+                        item = QTableWidgetItem(str(grading[j]))
+                        item.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+                        self.tableWidgetGrading.setItem(row, j, item)
+        except:
+            self.statusBarGradingPaper.showMessage("处理失败")
 
 
 # 试卷设置
@@ -333,6 +381,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.displayPictureWindow = displayPictureWindow()
         self.examPaperSettingWindow = examPaperSettingWindow()
         self.imageSegmentationWindow = imageSegmentationWindow()
+        self.scoringAnalysisWindow = scoringAnalysisWindow()
 
         number = self.stackedWidget.addWidget(self.initialWindow)
         self.stackedWidget.setCurrentIndex(number)
@@ -350,6 +399,7 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.actionDisplayPicture.triggered.connect(self.displayPicture)
         self.actionExamPaperSetting.triggered.connect(self.examPaperSetting)
         self.actionImageSegmentation.triggered.connect(self.imageSegmentation)
+        self.actionScoringAnalysis.triggered.connect(self.scoringAnalysis)
 
     def inputAnswer(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.inputAnswerWindow))
@@ -361,9 +411,15 @@ class menuWindow(QMainWindow, Ui_menuWindow):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.gradingPaperWindow))
 
     def outputExcel(self):
-        global gradings
-        writeGradExcel(gradings)
-        self.statusBar.showMessage("保存成功！")
+        try:
+            global gradings
+            if not gradings:
+                self.statusBar.showMessage("请先批阅试卷！")
+            else:
+                writeGradExcel(gradings, QFileDialog.getSaveFileUrl()[0].url()[8:] + ".xlsx")
+                self.statusBar.showMessage("保存成功！")
+        except:
+            self.statusBar.showMessage("保存失败！")
 
     def perspectiveTransformation(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.perspectiveTransformationWindow))
@@ -379,6 +435,9 @@ class menuWindow(QMainWindow, Ui_menuWindow):
 
     def imageSegmentation(self):
         self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.imageSegmentationWindow))
+
+    def scoringAnalysis(self):
+        self.stackedWidget.setCurrentIndex(self.stackedWidget.addWidget(self.scoringAnalysisWindow))
 
 
 if __name__ == "__main__":

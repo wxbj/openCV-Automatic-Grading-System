@@ -20,7 +20,7 @@
       <x>-2</x>
       <y>-1</y>
       <width>801</width>
-      <height>701</height>
+      <height>681</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -44,13 +44,14 @@
     <addaction name="actionInputAnswer"/>
     <addaction name="actionInputReply"/>
     <addaction name="actionGradingPaper"/>
-    <addaction name="actionOutputExcel"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>工具</string>
     </property>
     <addaction name="actionDisplayPicture"/>
+    <addaction name="actionOutputExcel"/>
+    <addaction name="actionScoringAnalysis"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -65,6 +66,7 @@
    <addaction name="menuAutomaticGradingSystem"/>
    <addaction name="menuTools"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionInputAnswer">
    <property name="text">
     <string>读入答案</string>
@@ -77,12 +79,12 @@
   </action>
   <action name="actionGradingPaper">
    <property name="text">
-    <string>开始阅卷</string>
+    <string>批阅试卷</string>
    </property>
   </action>
   <action name="actionOutputExcel">
    <property name="text">
-    <string>导出为Excel</string>
+    <string>成绩导出为Excel</string>
    </property>
   </action>
   <action name="action1">
@@ -298,6 +300,11 @@
   <action name="actionImageSegmentation">
    <property name="text">
     <string>图像分割</string>
+   </property>
+  </action>
+  <action name="actionScoringAnalysis">
+   <property name="text">
+    <string>成绩分析</string>
    </property>
   </action>
  </widget>

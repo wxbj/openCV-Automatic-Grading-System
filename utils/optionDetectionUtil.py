@@ -244,15 +244,15 @@ def detectSingleChoice(darryBoxes, number, optionNumber, numberToLetter):
 
 # 多选填涂检测
 def detectMultipleChoice(darryBoxes, number, optionNumber, numberToLetter):
-    choice = []
+    choices = []
     choiceLetter = []
     for i in range(number):
         listChoice = []
         for j in range(optionNumber):
-            if cv.countNonZero(darryBoxes[i][j]) >= 100:
+            if cv.countNonZero(darryBoxes[i][j]) >= 200:
                 listChoice.append(j)
-        choice.append(listChoice)
-    for choice in choice:
+        choices.append(listChoice)
+    for choice in choices:
         strChoice = ""
         for i in choice:
             strChoice += numberToLetter[i]

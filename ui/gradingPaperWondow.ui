@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>显示分数</string>
+   <string>批阅试卷</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="tableWidgetGrading">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>70</y>
       <width>761</width>
-      <height>551</height>
+      <height>521</height>
      </rect>
     </property>
     <property name="contextMenuPolicy">
@@ -166,6 +166,7 @@
     </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBarGradingPaper"/>
  </widget>
  <resources/>
  <connections/>
