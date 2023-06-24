@@ -152,16 +152,17 @@ def saveResultFolder(preFolderUrl, folderName, images):
 
 
 if __name__ == "__main__":
-    answer = {'姓名栏:': [9], '准考证号栏:': [9, 9, 9, 9, 9, 9], '缺考栏:': ['否'], '主观题栏:': [9], '考试科目栏:': [0, 1],
-              '单选题:': ['A', 'B', 'C', 'C', 'D', 'B', 'C', 'C', 'D', 'A', 'B', 'C', 'D', 'B', 'C', 'A', 'B', 'B', 'A',
-                       'D', 'D', 'B', 'B', 'C', 'D', 'B', 'C', 'C', 'B', 'D', 'A', 'C', 'B', 'D', 'A', 'A', 'B', 'B',
-                       'D', 'D', 'A', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'A', 'A', 'D', 'C', 'A', 'C', 'B', 'A', 'B',
-                       'A', 'B', 'D'],
-              '多选题:': ['AB', 'BC', 'BC', 'CD', 'ABC', 'BC', 'BD', 'BD', 'AC', 'AD', 'AC', 'BC', 'CD', 'BD', 'ABD', 'BC',
-                       'BD', 'AC', 'BC', 'ACD', 'AC', 'BC', 'ACD', 'ABCD', 'BCD', 'BC', 'CD', 'AC', 'AB', 'BD', 'AB',
-                       'BC', 'CD', 'AD', 'ABC', 'AB', 'BC', 'BD', 'AC', 'BC', 'AD', 'BD', 'BC', 'AC', 'BCD']}
-    replyUrls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img2.jpg',
-                 'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img1.jpg']
-    paperOption = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
-    imageSegmentation = [5, 10, 50, 2, 1, 0, 50, 200, 2, 2, 1]
-    getGradingLists(answer, replyUrls, paperOption, imageSegmentation)
+    pass
+    # answer = {'姓名栏:': [9], '准考证号栏:': [9, 9, 9, 9, 9, 9], '缺考栏:': ['否'], '主观题栏:': [9], '考试科目栏:': [0, 1],
+    #           '单选题:': ['A', 'B', 'C', 'C', 'D', 'B', 'C', 'C', 'D', 'A', 'B', 'C', 'D', 'B', 'C', 'A', 'B', 'B', 'A',
+    #                    'D', 'D', 'B', 'B', 'C', 'D', 'B', 'C', 'C', 'B', 'D', 'A', 'C', 'B', 'D', 'A', 'A', 'B', 'B',
+    #                    'D', 'D', 'A', 'A', 'B', 'D', 'D', 'B', 'B', 'C', 'A', 'A', 'D', 'C', 'A', 'C', 'B', 'A', 'B',
+    #                    'A', 'B', 'D'],
+    #           '多选题:': ['AB', 'BC', 'BC', 'CD', 'ABC', 'BC', 'BD', 'BD', 'AC', 'AD', 'AC', 'BC', 'CD', 'BD', 'ABD', 'BC',
+    #                    'BD', 'AC', 'BC', 'ACD', 'AC', 'BC', 'ACD', 'ABCD', 'BCD', 'BC', 'CD', 'AC', 'AB', 'BD', 'AB',
+    #                    'BC', 'CD', 'AD', 'ABC', 'AB', 'BC', 'BD', 'AC', 'BC', 'AD', 'BD', 'BC', 'AC', 'BCD']}
+    # replyUrls = ['D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img2.jpg',
+    #              'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System/img/第二次月考/img1.jpg']
+    # paperOption = {'单选题开始': 1, '单选题终止': 60, '单选题分值': 1, '多选题开始': 61, '多选题终止': 105, '多选题分值': 2}
+    # imageSegmentation = [5, 10, 50, 2, 1, 0, 50, 200, 2, 2, 1]
+    # getGradingLists(answer, replyUrls, paperOption, imageSegmentation)

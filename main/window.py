@@ -136,9 +136,11 @@ class scoringAnalysisWindow(QMainWindow, Ui_scoringAnalysisWindow):
             global paperOption
             accuracyList = []
             for i in range(paperOption["单选题终止"] - paperOption["单选题开始"] + 1):
-                accuracyList.append(f"单选题第{i + 1}题" + str(accuracy[f"单选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%")
+                accuracyList.append(
+                    f"单选题第{i + 1}题" + str(accuracy[f"单选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%" + "   ")
             for i in range(paperOption["多选题终止"] - paperOption["多选题开始"] + 1):
-                accuracyList.append(f"多选题第{i + 1}题" + str(accuracy[f"多选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%")
+                accuracyList.append(
+                    f"多选题第{i + 1}题" + str(accuracy[f"多选题第{i + 1}题"] / accuracy["总学生数"] * 100) + "%" + "   ")
             accuracyStr = ""
             number = 0
             for i in accuracyList:
@@ -257,6 +259,10 @@ class inputAnswerWindow(QMainWindow, Ui_inputAnswerWindow):
                                                            'D:/BaiduSyncdisk/code/openCV-Automatic-Grading-System\img',
                                                            "Image files (*.jpg *.gif *.png)")[0]
             self.lineEditAddress.setText(self.fileAddress)
+
+            self.labelInputAnswerImage.setPixmap(QtGui.QPixmap(self.fileAddress))
+            self.labelInputAnswerImage.setScaledContents(True)
+
             self.statusBarInputAnswer.showMessage("图片读取成功")
         except:
             self.statusBarInputAnswer.showMessage("未成功读取图片")
