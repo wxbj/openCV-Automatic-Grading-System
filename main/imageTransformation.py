@@ -83,9 +83,3 @@ def getPreprocessedImage(filePath, perspectiveTransformation):
     imgWarpColoreds = cv.warpPerspective(img, matrix, (widthImg, heightImg))
 
     return imgWarpColoreds
-
-
-if __name__ == "__main__":
-    pass
-    # getParameter(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\answer.jpg')
-    # getPreprocessedImage(r'D:\BaiduSyncdisk\code\openCV-Automatic-Grading-System\img\normal\answer.jpg')
